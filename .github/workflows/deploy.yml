@@ -1,0 +1,99 @@
+name: Build and deploy voice pack
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      # Model and voice packs. Bump the key prefix when the model version
+      # (MODEL_REPO / MODEL_SHA256 in scripts/build.py) changes.
+      - name: Restore Kokoro model cache
+        uses: actions/cache@v4
+        with:
+          path: .cache/huggingface
+          key: hf-kokoro-v1.0-${{ runner.os }}-${{ hashFiles('config/voices.json') }}
+          restore-keys: |
+            hf-kokoro-v1.0-${{ runner.os }}-
+
+      # Existing audio + .clip-cache.json. A new key restores the previous
+      # cache via the prefix, then saves an updated snapshot.
+      - name: Restore audio cache
+        uses: actions/cache@v4
+        with:
+          path: dist
+          key: audio-${{ runner.os }}-${{ hashFiles('inputs.json', 'config/**', 'scripts/**', 'web/**', 'Dockerfile', 'requirements.txt') }}
+          restore-keys: |
+            audio-${{ runner.os }}-
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build builder image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          load: true
+          tags: dgen-livive-net-builder:local
+          cache-from: type=gha
+          cache-to: type=gha,mode=min
+
+      - name: Build audio
+        run: |
+          mkdir -p .cache/huggingface dist
+          docker compose run --rm builder --out /out
+
+      # The container runs as root and writes into bind-mounted directories.
+      # Normalize ownership so the cache save and Pages upload can read them.
+      - name: Normalize generated file ownership
+        if: always()
+        run: sudo chown -R "$(id -u):$(id -g)" dist .cache/huggingface 2>/dev/null || true
+
+      - name: Validate generated pack
+        run: python3 scripts/validate.py dist
+
+      - name: Stage Pages artifact
+        run: |
+          rm -rf site
+          mkdir -p site
+          cp -a dist/. site/
+          rm -f site/.clip-cache.json
+          cp CNAME site/CNAME
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
