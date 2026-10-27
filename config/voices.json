@@ -1,0 +1,24 @@
+{
+  "default": "af_heart",
+  "voices": [
+    { "id": "af_heart", "accent": "en-US", "gender": "female", "lang": "a", "grade": "A" },
+    { "id": "af_bella", "accent": "en-US", "gender": "female", "lang": "a", "grade": "A-" },
+    { "id": "af_nicole", "accent": "en-US", "gender": "female", "lang": "a", "grade": "B-" },
+    { "id": "af_aoede", "accent": "en-US", "gender": "female", "lang": "a", "grade": "C+" },
+
+    { "id": "am_fenrir", "accent": "en-US", "gender": "male", "lang": "a", "grade": "C+" },
+    { "id": "am_michael", "accent": "en-US", "gender": "male", "lang": "a", "grade": "C+" },
+    { "id": "am_puck", "accent": "en-US", "gender": "male", "lang": "a", "grade": "C+" },
+    { "id": "am_onyx", "accent": "en-US", "gender": "male", "lang": "a", "grade": "D" },
+
+    { "id": "bf_emma", "accent": "en-GB", "gender": "female", "lang": "b", "grade": "B-" },
+    { "id": "bf_isabella", "accent": "en-GB", "gender": "female", "lang": "b", "grade": "C" },
+    { "id": "bf_alice", "accent": "en-GB", "gender": "female", "lang": "b", "grade": "D" },
+    { "id": "bf_lily", "accent": "en-GB", "gender": "female", "lang": "b", "grade": "D" },
+
+    { "id": "bm_fable", "accent": "en-GB", "gender": "male", "lang": "b", "grade": "C" },
+    { "id": "bm_george", "accent": "en-GB", "gender": "male", "lang": "b", "grade": "C" },
+    { "id": "bm_lewis", "accent": "en-GB", "gender": "male", "lang": "b", "grade": "D+" },
+    { "id": "bm_daniel", "accent": "en-GB", "gender": "male", "lang": "b", "grade": "D" }
+  ]
+}

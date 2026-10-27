@@ -1,0 +1,12 @@
+{
+  "codec": "libopus",
+  "container": "webm",
+  "extension": ".weba",
+  "bitrate": "32k",
+  "channels": 1,
+  "sampleRate": 48000,
+  "frameDuration": 20,
+  "application": "audio",
+  "vbr": "on",
+  "compressionLevel": 10
+}

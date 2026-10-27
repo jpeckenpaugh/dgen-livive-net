@@ -1,0 +1,473 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>dgen-livive-net · voice test bench</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0d10;
+      --panel: #14181e;
+      --panel-2: #191e25;
+      --line: #2a313b;
+      --text: #e8edf3;
+      --muted: #93a0b0;
+      --accent: #ffb454;
+      --accent-2: #ff8a3d;
+      --ok: #7ee2a8;
+      --bad: #ff7b7b;
+    }
+    * { box-sizing: border-box; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      background:
+        radial-gradient(1100px 500px at 20% -10%, rgba(255, 138, 61, .12), transparent 65%),
+        radial-gradient(900px 500px at 100% 0%, rgba(80, 160, 255, .08), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.5;
+    }
+    header {
+      border-bottom: 1px solid var(--line);
+      padding: 30px clamp(18px, 4vw, 56px) 24px;
+      background: linear-gradient(180deg, rgba(20, 24, 30, .86), rgba(11, 13, 16, .4));
+    }
+    .eyebrow {
+      color: var(--accent);
+      font: 600 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 8px 0 4px;
+      font-size: clamp(28px, 4vw, 46px);
+      letter-spacing: -.035em;
+      line-height: 1.05;
+    }
+    .meta {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font: 12px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace;
+      overflow-wrap: anywhere;
+    }
+    main {
+      width: min(1240px, 100%);
+      margin: 0 auto;
+      padding: 24px clamp(18px, 4vw, 56px) 72px;
+    }
+    .panel {
+      background: linear-gradient(180deg, var(--panel), var(--panel-2));
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 18px;
+      margin-bottom: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
+    }
+    .controls {
+      display: grid;
+      grid-template-columns: minmax(240px, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+    }
+    .field { display: grid; gap: 7px; }
+    .field label, .panel h2 {
+      margin: 0;
+      font: 600 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    select, button {
+      font: inherit;
+      color: var(--text);
+      background: #10141a;
+      border: 1px solid #333d49;
+      border-radius: 9px;
+      padding: 10px 12px;
+    }
+    select { width: 100%; min-height: 43px; }
+    select:focus-visible, button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+    .actions { display: flex; gap: 8px; }
+    button {
+      cursor: pointer;
+      transition: transform .08s ease, border-color .15s ease, background .15s ease;
+      white-space: nowrap;
+    }
+    button:hover { border-color: #596878; background: #151b23; }
+    button:active { transform: translateY(1px); }
+    button.primary {
+      background: linear-gradient(180deg, var(--accent), var(--accent-2));
+      border-color: transparent;
+      color: #211306;
+      font-weight: 700;
+    }
+    button.primary:hover { background: linear-gradient(180deg, #ffc06b, #ff9550); }
+    button.ghost { background: transparent; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+    .status {
+      grid-column: 1 / -1;
+      min-height: 22px;
+      color: var(--muted);
+      font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      overflow-wrap: anywhere;
+    }
+    .status[data-kind="error"] { color: var(--bad); }
+    .status[data-kind="ok"] { color: var(--ok); }
+    .panel-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    .panel-head p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+    .hook-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    .hook-row select { flex: 1 1 240px; width: auto; }
+    #hookResult {
+      color: var(--muted);
+      font: 12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      overflow-wrap: anywhere;
+    }
+    .group { margin: 28px 0 0; }
+    .group h2 {
+      margin: 0 0 10px;
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 18px;
+      letter-spacing: -.01em;
+    }
+    .group h2 span {
+      color: var(--muted);
+      font: 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .08em;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 10px;
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      min-height: 150px;
+      transition: border-color .15s ease, transform .15s ease;
+    }
+    .card:hover { border-color: #465362; transform: translateY(-1px); }
+    .card.missing { opacity: .48; }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font: 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .card-top code { color: var(--accent); }
+    .card-top .tag {
+      border: 1px solid #2c3540;
+      border-radius: 999px;
+      padding: 3px 7px;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+    .line {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -.015em;
+      line-height: 1.25;
+    }
+    .card-meta {
+      color: var(--muted);
+      font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
+      overflow-wrap: anywhere;
+      margin-top: auto;
+    }
+    .card button {
+      align-self: flex-start;
+      padding: 8px 12px;
+      font-size: 13px;
+    }
+    @media (max-width: 640px) {
+      .controls { grid-template-columns: 1fr; }
+      .actions { justify-content: stretch; }
+      .actions button { flex: 1; }
+      .panel { padding: 14px; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="eyebrow">dgen-livive-net / audio bake</div>
+    <h1>Voice line test bench</h1>
+    <p class="meta" id="buildMeta">Loading registry…</p>
+  </header>
+
+  <main>
+    <section class="panel controls">
+      <div class="field">
+        <label for="voice">Voice</label>
+        <select id="voice" aria-label="Voice"></select>
+      </div>
+      <div class="actions">
+        <button id="playAll" class="primary" type="button">Play all</button>
+        <button id="stop" class="ghost" type="button">Stop</button>
+      </div>
+      <div class="status" id="status">Ready.</div>
+    </section>
+
+    <section class="panel">
+      <div class="panel-head">
+        <div>
+          <h2>Hook tester</h2>
+          <p>Pick a hook, then play a random phrase the runtime would choose.</p>
+        </div>
+      </div>
+      <div class="hook-row">
+        <select id="hook" aria-label="Hook"></select>
+        <button id="playHook" class="primary" type="button">Play random line</button>
+        <span id="hookResult"></span>
+      </div>
+    </section>
+
+    <div id="phraseGroups"></div>
+  </main>
+
+  <audio id="player" preload="none"></audio>
+
+  <script>
+    const registry = __REGISTRY_JSON__;
+
+    const $ = (selector) => document.querySelector(selector);
+    const player = $('#player');
+    const voiceSelect = $('#voice');
+    const hookSelect = $('#hook');
+    const status = $('#status');
+    const phraseGroups = $('#phraseGroups');
+    const buildMeta = $('#buildMeta');
+    const hookResult = $('#hookResult');
+
+    const phraseById = Object.fromEntries(registry.phrases.map((phrase) => [phrase.id, phrase]));
+    const state = {
+      voice: registry.defaultVoice || registry.voices[0]?.id || null,
+      queue: [],
+    };
+
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
+    }[char]));
+
+    const formatBytes = (bytes) => {
+      if (!bytes) return '0 B';
+      if (bytes < 1024) return `${bytes} B`;
+      if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+      return `${(bytes / 1024 / 1024).toFixed(2)} MB`;
+    };
+
+    const voiceLabel = (voice) =>
+      `${voice.id} · ${voice.gender}${voice.grade ? ` · ${voice.grade}` : ''}`;
+
+    const entryFor = (phraseId) =>
+      registry.files?.[state.voice]?.[phraseId] || null;
+
+    function setStatus(message, kind = '') {
+      status.textContent = message;
+      if (kind) status.dataset.kind = kind;
+      else delete status.dataset.kind;
+    }
+
+    function renderBuildMeta() {
+      const totals = registry.build.totals;
+      const encoder = registry.build.encoder;
+      const model = registry.build.model;
+      buildMeta.textContent = [
+        `build ${registry.build.id}`,
+        `${totals.clips} clips`,
+        `${totals.voices} voices`,
+        `${formatBytes(totals.bytes)}`,
+        `Opus ${encoder.bitrate}`,
+        `${model.repo} ${model.release}`,
+        registry.build.createdAt,
+      ].join(' · ');
+      document.title = `dgen-livive-net · ${totals.clips} clips`;
+    }
+
+    function renderVoices() {
+      const groups = new Map();
+      for (const voice of registry.voices) {
+        if (!groups.has(voice.accent)) groups.set(voice.accent, []);
+        groups.get(voice.accent).push(voice);
+      }
+      for (const [accent, voices] of groups) {
+        const optgroup = document.createElement('optgroup');
+        optgroup.label = accent;
+        for (const voice of voices) {
+          const option = document.createElement('option');
+          option.value = voice.id;
+          option.textContent = voiceLabel(voice);
+          optgroup.append(option);
+        }
+        voiceSelect.append(optgroup);
+      }
+      if (state.voice) voiceSelect.value = state.voice;
+    }
+
+    function renderHooks() {
+      for (const hook of Object.keys(registry.hooks)) {
+        const option = document.createElement('option');
+        option.value = hook;
+        option.textContent = hook;
+        hookSelect.append(option);
+      }
+    }
+
+    function renderPhrases() {
+      phraseGroups.replaceChildren();
+      for (const group of registry.groups) {
+        const phrases = registry.phrases.filter((phrase) => phrase.group === group);
+        if (!phrases.length) continue;
+
+        const section = document.createElement('section');
+        section.className = 'group';
+        const heading = document.createElement('h2');
+        heading.innerHTML = `${escapeHtml(group)} <span>${phrases.length}</span>`;
+        section.append(heading);
+
+        const grid = document.createElement('div');
+        grid.className = 'grid';
+
+        for (const phrase of phrases) {
+          const entry = entryFor(phrase.id);
+          const card = document.createElement('article');
+          card.className = `card${entry ? '' : ' missing'}`;
+          const meta = entry
+            ? `${entry.durationMs} ms · ${formatBytes(entry.bytes)} · ${escapeHtml(entry.path)}`
+            : `not built for ${escapeHtml(state.voice || 'this voice')}`;
+          card.innerHTML = `
+            <div class="card-top">
+              <code>${escapeHtml(phrase.id)}</code>
+              <span class="tag">${escapeHtml(phrase.alternate ? 'alternate' : phrase.group)}</span>
+            </div>
+            <p class="line">${escapeHtml(phrase.text)}</p>
+            <div class="card-meta">${meta}</div>
+            <button type="button" ${entry ? '' : 'disabled'}>Play</button>
+          `;
+          card.querySelector('button').addEventListener('click', () => {
+            playPhrase(phrase.id);
+          });
+          grid.append(card);
+        }
+
+        section.append(grid);
+        phraseGroups.append(section);
+      }
+    }
+
+    function playPhrase(phraseId, fromQueue = false) {
+      const entry = entryFor(phraseId);
+      const phrase = phraseById[phraseId];
+      if (!entry) {
+        setStatus(`No file for ${state.voice} / ${phraseId}`, 'error');
+        return false;
+      }
+      if (!fromQueue) state.queue = [];
+      player.pause();
+      player.src = entry.path;
+      player.load();
+      player.play().catch((error) => {
+        setStatus(`Playback failed: ${error.message}`, 'error');
+      });
+      setStatus(
+        `${state.voice} → ${phraseId} · “${phrase.text}” · ${entry.durationMs} ms · ${entry.path}`,
+      );
+      return true;
+    }
+
+    function playNext() {
+      if (!state.queue.length) {
+        setStatus('Finished.', 'ok');
+        return;
+      }
+      playPhrase(state.queue.shift(), true);
+    }
+
+    function playAll() {
+      state.queue = registry.phrases
+        .filter((phrase) => entryFor(phrase.id))
+        .map((phrase) => phrase.id);
+      if (!state.queue.length) {
+        setStatus('No clips for this voice.', 'error');
+        return;
+      }
+      playNext();
+    }
+
+    function stopPlayback() {
+      state.queue = [];
+      player.pause();
+      player.removeAttribute('src');
+      player.load();
+      setStatus('Stopped.');
+    }
+
+    function playRandomHook() {
+      const hook = hookSelect.value;
+      const candidates = (registry.hooks[hook] || []).filter((phraseId) => entryFor(phraseId));
+      if (!candidates.length) {
+        hookResult.textContent = `${hook} → no built phrases for ${state.voice}`;
+        setStatus(`No files for hook ${hook} on ${state.voice}`, 'error');
+        return;
+      }
+      const phraseId = candidates[Math.floor(Math.random() * candidates.length)];
+      const phrase = phraseById[phraseId];
+      hookResult.textContent = `${hook} → ${phraseId} · “${phrase.text}”`;
+      playPhrase(phraseId);
+    }
+
+    voiceSelect.addEventListener('change', () => {
+      state.voice = voiceSelect.value;
+      state.queue = [];
+      renderPhrases();
+      setStatus(`Voice: ${state.voice}`);
+    });
+    $('#playAll').addEventListener('click', playAll);
+    $('#stop').addEventListener('click', stopPlayback);
+    $('#playHook').addEventListener('click', playRandomHook);
+    player.addEventListener('ended', () => {
+      if (state.queue.length) playNext();
+      else setStatus('Finished.', 'ok');
+    });
+    player.addEventListener('error', () => {
+      setStatus(`Audio error for ${player.currentSrc || 'unknown source'}`, 'error');
+    });
+
+    renderBuildMeta();
+    renderVoices();
+    renderHooks();
+    renderPhrases();
+
+    const totals = registry.build.totals;
+    setStatus(`Ready. ${totals.clips} clips across ${totals.voices} voices.`, 'ok');
+  </script>
+</body>
+</html>

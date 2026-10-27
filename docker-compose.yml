@@ -1,0 +1,10 @@
+services:
+  builder:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: dgen-livive-net-builder:local
+    volumes:
+      - ./dist:/out
+      - ./.cache/huggingface:/cache/huggingface
+    command: ["--out", "/out"]

@@ -1,0 +1,10 @@
+.git
+.gitignore
+dist
+models
+.cache
+*.wav
+__pycache__
+*.py[cod]
+.venv
+.DS_Store
