@@ -65,7 +65,12 @@ def parse_args() -> argparse.Namespace:
         "--threads",
         type=int,
         default=0,
-        help="Torch CPU threads (0 = use TORCH_NUM_THREADS or 1)",
+        help="Torch CPU threads (0 = all available CPUs, or TORCH_NUM_THREADS)",
+    )
+    parser.add_argument(
+        "--reproducible",
+        action="store_true",
+        help="Seed each clip and default to one thread for repeatable output",
     )
     return parser.parse_args()
 
@@ -245,11 +250,6 @@ def normalize_audio(audio: np.ndarray, sample_rate: int) -> np.ndarray:
 
 
 def clip_seed(voice_id: str, phrase_id: str, speed: float) -> int:
-    """Stable per-clip seed.
-
-    Kokoro's ISTFTNet source module uses random initial phase and noise, so a
-    seed is required for repeatable builds and stable content hashes.
-    """
     material = f"{MODEL_SHA256}|{voice_id}|{phrase_id}|{speed:.6f}"
     return (
         int.from_bytes(hashlib.sha256(material.encode("utf-8")).digest()[:8], "big")
@@ -545,6 +545,7 @@ def make_registry(
     default_voice: str,
     elapsed_seconds: float,
     threads: int,
+    reproducible: bool,
     reused: int,
     generated: int,
 ) -> dict:
@@ -576,6 +577,7 @@ def make_registry(
                 "torchVersion": torch.__version__,
                 "speed": speed,
                 "threads": threads,
+                "reproducible": reproducible,
             },
             "encoder": encoder,
             "totals": {
@@ -639,7 +641,12 @@ def main() -> None:
     if default_voice not in {voice["id"] for voice in voices}:
         default_voice = voices[0]["id"]
 
-    threads = args.threads or int(os.environ.get("TORCH_NUM_THREADS", "1"))
+    threads = args.threads or int(
+        os.environ.get(
+            "TORCH_NUM_THREADS",
+            1 if args.reproducible else (os.cpu_count() or 1),
+        )
+    )
     torch.set_grad_enabled(False)
     torch.set_num_threads(threads)
     try:
@@ -679,6 +686,7 @@ def main() -> None:
         "encoder": encoder,
         "speed": args.speed,
         "clipVersion": CLIP_VERSION,
+        "reproducible": args.reproducible,
         "selectedVoices": [voice["id"] for voice in voices],
         "selectedPhrases": [phrase["id"] for phrase in phrases],
         "model": {
@@ -738,10 +746,12 @@ def main() -> None:
             label = f"[{index:>3}/{len(jobs)}] {voice_id:<12} {phrase_id:<18}"
             print(label, end="", flush=True)
 
-            seed = clip_seed(voice_id, phrase_id, args.speed)
-            torch.manual_seed(seed)
-            random.seed(seed)
-            np.random.seed(seed)
+            if args.reproducible:
+                seed = clip_seed(voice_id, phrase_id, args.speed)
+                torch.manual_seed(seed)
+                random.seed(seed)
+                np.random.seed(seed)
+
             audio, phonemes = synthesize(
                 pipelines[voice["lang"]],
                 phrase_text(phrase, voice["language"], source_language),
@@ -795,6 +805,7 @@ def main() -> None:
         default_voice,
         elapsed,
         threads,
+        args.reproducible,
         reused,
         len(jobs),
     )

@@ -86,6 +86,8 @@ make serve
 - A hidden `dist/.clip-cache.json` keeps clip fingerprints across partial builds, so `make build-one` followed by `make build` still reuses the unchanged files.
 - `make build` is incremental; if every selected clip is reusable, the model is not loaded at all.
 - `make rebuild` regenerates all selected clips (`--force`).
+- Normal builds are fast: all available CPU threads, no per-clip seeding.
+- `--reproducible` seeds each clip and defaults to one thread; `make reproducible` forces a repeatable rebuild.
 - `make clean` removes `dist/` but leaves the model cache; `make shell` opens a shell in the builder image.
 - `make validate` checks every registry entry. Unreferenced audio files from partial builds are warnings unless you pass `--strict`.
 
