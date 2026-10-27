@@ -1,61 +1,350 @@
 {
-  "version": 1,
-  "groups": ["greeting", "friendship", "play", "win", "loss", "ambient", "decline", "close"],
+  "version": 3,
+  "sourceLanguage": "en",
+  "groups": [
+    "greeting",
+    "friendship",
+    "play",
+    "win",
+    "loss",
+    "ambient",
+    "decline",
+    "close"
+  ],
   "phrases": [
-    { "id": "greet", "text": "Hi there!", "group": "greeting" },
-    { "id": "hello", "text": "Hello!", "group": "greeting" },
-    { "id": "good-to-see", "text": "Good to see you!", "group": "greeting" },
-    { "id": "hey-buddy", "text": "Hey, buddy!", "group": "greeting" },
-
-    { "id": "be-friends", "text": "Want to be friends?", "group": "friendship" },
-    { "id": "yay", "text": "Yay!", "group": "friendship" },
-
-    { "id": "lets-play", "text": "Let's play a game.", "group": "play" },
-    { "id": "got-time", "text": "Got time for a round?", "group": "play" },
-    { "id": "watch-this", "text": "Watch this!", "group": "play" },
-
-    { "id": "nice-one", "text": "Nice one!", "group": "win" },
-    { "id": "well-played", "text": "Well played!", "group": "win" },
-    { "id": "you-got-me", "text": "You got me!", "group": "win" },
-
-    { "id": "good-game", "text": "Good game!", "group": "loss" },
-    { "id": "so-close", "text": "So close!", "group": "loss" },
-    { "id": "tough-one", "text": "Tough one!", "group": "loss" },
-
-    { "id": "nice-day", "text": "Nice day!", "group": "ambient" },
-    { "id": "no-worries", "text": "No worries.", "group": "decline" },
-
-    { "id": "again", "text": "Wanna go again?", "group": "close" },
-    { "id": "maybe-next-time", "text": "Maybe next time.", "group": "close" },
-    { "id": "see-you", "text": "See you next time.", "group": "close" },
-
-    { "id": "hiya", "text": "Hiya!", "group": "greeting", "alternate": true },
-    { "id": "fancy-a-game", "text": "Fancy a game?", "group": "play", "alternate": true },
-    { "id": "one-more", "text": "One more?", "group": "close", "alternate": true },
-    { "id": "catch-you-later", "text": "Catch you later!", "group": "close", "alternate": true },
-    { "id": "friends-now", "text": "We're friends now!", "group": "friendship", "alternate": true },
-    { "id": "good-luck", "text": "Good luck!", "group": "play", "alternate": true }
+    {
+      "id": "greet",
+      "text": "Hi there!",
+      "group": "greeting",
+      "translations": {
+        "es": "¡Hola!",
+        "pt": "Oi!",
+        "hi": "नमस्ते!"
+      }
+    },
+    {
+      "id": "hello",
+      "text": "Hello!",
+      "group": "greeting",
+      "translations": {
+        "es": "¡Hola!",
+        "pt": "Olá!",
+        "hi": "हैलो!"
+      }
+    },
+    {
+      "id": "good-to-see",
+      "text": "Good to see you!",
+      "group": "greeting",
+      "translations": {
+        "es": "¡Qué bueno verte!",
+        "pt": "Que bom te ver!",
+        "hi": "तुम्हें देखकर अच्छा लगा!"
+      }
+    },
+    {
+      "id": "hey-buddy",
+      "text": "Hey, buddy!",
+      "group": "greeting",
+      "translations": {
+        "es": "¡Hola, amigo!",
+        "pt": "Ei, parceiro!",
+        "hi": "अरे, दोस्त!"
+      }
+    },
+    {
+      "id": "be-friends",
+      "text": "Want to be friends?",
+      "group": "friendship",
+      "translations": {
+        "es": "¿Quieres que seamos amigos?",
+        "pt": "Quer ser meu amigo?",
+        "hi": "क्या हम दोस्त बन सकते हैं?"
+      }
+    },
+    {
+      "id": "yay",
+      "text": "Yay!",
+      "group": "friendship",
+      "translations": {
+        "es": "¡Genial!",
+        "pt": "Eba!",
+        "hi": "वाह!"
+      }
+    },
+    {
+      "id": "lets-play",
+      "text": "Let's play a game.",
+      "group": "play",
+      "translations": {
+        "es": "Vamos a jugar.",
+        "pt": "Vamos jogar.",
+        "hi": "चलो खेलते हैं।"
+      }
+    },
+    {
+      "id": "got-time",
+      "text": "Got time for a round?",
+      "group": "play",
+      "translations": {
+        "es": "¿Tienes tiempo para una partida?",
+        "pt": "Tem tempo para uma partida?",
+        "hi": "एक राउंड के लिए समय है?"
+      }
+    },
+    {
+      "id": "watch-this",
+      "text": "Watch this!",
+      "group": "play",
+      "translations": {
+        "es": "¡Mira esto!",
+        "pt": "Olha isso!",
+        "hi": "यह देखो!"
+      }
+    },
+    {
+      "id": "nice-one",
+      "text": "Nice one!",
+      "group": "win",
+      "translations": {
+        "es": "¡Bien hecho!",
+        "pt": "Mandou bem!",
+        "hi": "बढ़िया!"
+      }
+    },
+    {
+      "id": "well-played",
+      "text": "Well played!",
+      "group": "win",
+      "translations": {
+        "es": "¡Bien jugado!",
+        "pt": "Bem jogado!",
+        "hi": "अच्छा खेला!"
+      }
+    },
+    {
+      "id": "you-got-me",
+      "text": "You got me!",
+      "group": "win",
+      "translations": {
+        "es": "¡Me venciste!",
+        "pt": "Você me venceu!",
+        "hi": "तुमने मुझे हरा दिया!"
+      }
+    },
+    {
+      "id": "good-game",
+      "text": "Good game!",
+      "group": "loss",
+      "translations": {
+        "es": "¡Buena partida!",
+        "pt": "Boa partida!",
+        "hi": "अच्छा खेल!"
+      }
+    },
+    {
+      "id": "so-close",
+      "text": "So close!",
+      "group": "loss",
+      "translations": {
+        "es": "¡Casi!",
+        "pt": "Quase!",
+        "hi": "बहुत करीब!"
+      }
+    },
+    {
+      "id": "tough-one",
+      "text": "Tough one!",
+      "group": "loss",
+      "translations": {
+        "es": "¡Qué difícil!",
+        "pt": "Essa foi difícil!",
+        "hi": "यह तो मुश्किल था!"
+      }
+    },
+    {
+      "id": "nice-day",
+      "text": "Nice day!",
+      "group": "ambient",
+      "translations": {
+        "es": "¡Buen día!",
+        "pt": "Que dia bom!",
+        "hi": "क्या अच्छा दिन है!"
+      }
+    },
+    {
+      "id": "no-worries",
+      "text": "No worries.",
+      "group": "decline",
+      "translations": {
+        "es": "No hay problema.",
+        "pt": "Sem problema.",
+        "hi": "कोई बात नहीं।"
+      }
+    },
+    {
+      "id": "again",
+      "text": "Wanna go again?",
+      "group": "close",
+      "translations": {
+        "es": "¿Quieres jugar otra vez?",
+        "pt": "Quer jogar de novo?",
+        "hi": "फिर से खेलें?"
+      }
+    },
+    {
+      "id": "maybe-next-time",
+      "text": "Maybe next time.",
+      "group": "close",
+      "translations": {
+        "es": "Quizás la próxima vez.",
+        "pt": "Talvez na próxima.",
+        "hi": "शायद अगली बार।"
+      }
+    },
+    {
+      "id": "see-you",
+      "text": "See you next time.",
+      "group": "close",
+      "translations": {
+        "es": "Hasta la próxima.",
+        "pt": "Até a próxima.",
+        "hi": "अगली बार मिलते हैं।"
+      }
+    },
+    {
+      "id": "hiya",
+      "text": "Hiya!",
+      "group": "greeting",
+      "alternate": true,
+      "translations": {
+        "es": "¡Hola!",
+        "pt": "E aí!",
+        "hi": "हाय!"
+      }
+    },
+    {
+      "id": "fancy-a-game",
+      "text": "Fancy a game?",
+      "group": "play",
+      "alternate": true,
+      "translations": {
+        "es": "¿Te animas a jugar?",
+        "pt": "Tá a fim de jogar?",
+        "hi": "खेलने का मन है?"
+      }
+    },
+    {
+      "id": "one-more",
+      "text": "One more?",
+      "group": "close",
+      "alternate": true,
+      "translations": {
+        "es": "¿Otra vez?",
+        "pt": "Mais uma?",
+        "hi": "एक और?"
+      }
+    },
+    {
+      "id": "catch-you-later",
+      "text": "Catch you later!",
+      "group": "close",
+      "alternate": true,
+      "translations": {
+        "es": "¡Hasta luego!",
+        "pt": "Até mais!",
+        "hi": "फिर मिलेंगे!"
+      }
+    },
+    {
+      "id": "friends-now",
+      "text": "We're friends now!",
+      "group": "friendship",
+      "alternate": true,
+      "translations": {
+        "es": "¡Ahora somos amigos!",
+        "pt": "Agora somos amigos!",
+        "hi": "अब हम दोस्त हैं!"
+      }
+    },
+    {
+      "id": "good-luck",
+      "text": "Good luck!",
+      "group": "play",
+      "alternate": true,
+      "translations": {
+        "es": "¡Buena suerte!",
+        "pt": "Boa sorte!",
+        "hi": "शुभकामनाएँ!"
+      }
+    }
   ],
   "hooks": {
-    "stranger": ["greet", "be-friends"],
-    "friend": ["hello", "good-to-see"],
-    "accepted": ["yay", "friends-now"],
-    "declined": ["no-worries", "maybe-next-time"],
-    "companion": ["hey-buddy", "greet"],
-
-    "social.greet": ["greet", "hello"],
-    "social.chat": ["nice-day"],
-    "social.invite": ["lets-play", "got-time"],
-    "social.friend": ["got-time", "again"],
-    "social.npcGamePrompt": ["watch-this"],
-
-    "minigame.win": ["nice-one", "well-played", "you-got-me"],
-    "minigame.loss": ["good-game", "tough-one"],
-    "minigame.draw": ["good-game", "so-close"],
-    "minigame.abandoned": ["maybe-next-time", "see-you"],
-
-    "game.start": ["good-luck"],
-    "replay": ["again", "one-more"],
-    "close": ["see-you", "catch-you-later"]
+    "stranger": [
+      "greet",
+      "be-friends"
+    ],
+    "friend": [
+      "hello",
+      "good-to-see"
+    ],
+    "accepted": [
+      "yay",
+      "friends-now"
+    ],
+    "declined": [
+      "no-worries",
+      "maybe-next-time"
+    ],
+    "companion": [
+      "hey-buddy",
+      "greet"
+    ],
+    "social.greet": [
+      "greet",
+      "hello"
+    ],
+    "social.chat": [
+      "nice-day"
+    ],
+    "social.invite": [
+      "lets-play",
+      "got-time"
+    ],
+    "social.friend": [
+      "got-time",
+      "again"
+    ],
+    "social.npcGamePrompt": [
+      "watch-this"
+    ],
+    "minigame.win": [
+      "nice-one",
+      "well-played",
+      "you-got-me"
+    ],
+    "minigame.loss": [
+      "good-game",
+      "tough-one"
+    ],
+    "minigame.draw": [
+      "good-game",
+      "so-close"
+    ],
+    "minigame.abandoned": [
+      "maybe-next-time",
+      "see-you"
+    ],
+    "game.start": [
+      "good-luck"
+    ],
+    "replay": [
+      "again",
+      "one-more"
+    ],
+    "close": [
+      "see-you",
+      "catch-you-later"
+    ]
   }
 }

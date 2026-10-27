@@ -197,6 +197,12 @@
       letter-spacing: -.015em;
       line-height: 1.25;
     }
+    .source {
+      margin: -4px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.3;
+    }
     .card-meta {
       color: var(--muted);
       font: 11px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -268,9 +274,18 @@
     const hookResult = $('#hookResult');
 
     const phraseById = Object.fromEntries(registry.phrases.map((phrase) => [phrase.id, phrase]));
+    const voiceById = Object.fromEntries(registry.voices.map((voice) => [voice.id, voice]));
     const state = {
       voice: registry.defaultVoice || registry.voices[0]?.id || null,
       queue: [],
+    };
+
+    const currentVoice = () => voiceById[state.voice] || null;
+    const languageForVoice = (voice) =>
+      voice?.language || (voice?.accent?.startsWith('es') ? 'es' : 'en');
+    const phraseText = (phrase) => {
+      const language = languageForVoice(currentVoice());
+      return phrase.translations?.[language] || phrase.text;
     };
 
     const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
@@ -304,6 +319,7 @@
         `build ${registry.build.id}`,
         `${totals.clips} clips`,
         `${totals.voices} voices`,
+        `${(registry.languages || []).join(' + ')}`,
         `${formatBytes(totals.bytes)}`,
         `Opus ${encoder.bitrate}`,
         `${model.repo} ${model.release}`,
@@ -363,12 +379,19 @@
           const meta = entry
             ? `${entry.durationMs} ms · ${formatBytes(entry.bytes)} · ${escapeHtml(entry.path)}`
             : `not built for ${escapeHtml(state.voice || 'this voice')}`;
+          const language = languageForVoice(currentVoice());
+          const text = phraseText(phrase);
+          const source =
+            language !== (registry.sourceLanguage || 'en') && phrase.text !== text
+              ? phrase.text
+              : null;
           card.innerHTML = `
             <div class="card-top">
               <code>${escapeHtml(phrase.id)}</code>
               <span class="tag">${escapeHtml(phrase.alternate ? 'alternate' : phrase.group)}</span>
             </div>
-            <p class="line">${escapeHtml(phrase.text)}</p>
+            <p class="line">${escapeHtml(text)}</p>
+            ${source ? `<p class="source">${escapeHtml(source)}</p>` : ''}
             <div class="card-meta">${meta}</div>
             <button type="button" ${entry ? '' : 'disabled'}>Play</button>
           `;
@@ -398,7 +421,7 @@
         setStatus(`Playback failed: ${error.message}`, 'error');
       });
       setStatus(
-        `${state.voice} → ${phraseId} · “${phrase.text}” · ${entry.durationMs} ms · ${entry.path}`,
+        `${state.voice} → ${phraseId} · “${phraseText(phrase)}” · ${entry.durationMs} ms · ${entry.path}`,
       );
       return true;
     }
@@ -440,7 +463,7 @@
       }
       const phraseId = candidates[Math.floor(Math.random() * candidates.length)];
       const phrase = phraseById[phraseId];
-      hookResult.textContent = `${hook} → ${phraseId} · “${phrase.text}”`;
+      hookResult.textContent = `${hook} → ${phraseId} · “${phraseText(phrase)}”`;
       playPhrase(phraseId);
     }
 

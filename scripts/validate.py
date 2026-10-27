@@ -79,6 +79,20 @@ def main() -> int:
         if missing:
             fail(errors, f"hook {hook} references unknown phrases: {missing}")
 
+    source_language = registry.get("sourceLanguage", "en")
+    for voice in voices:
+        language = voice.get("language", "en")
+        if language == source_language:
+            continue
+        for phrase in phrases:
+            translations = phrase.get("translations")
+            if not isinstance(translations, dict) or not translations.get(language):
+                fail(
+                    errors,
+                    f"voice {voice['id']} needs phrase {phrase['id']} "
+                    f"in {language!r}",
+                )
+
     orphans = [
         path.relative_to(dist)
         for path in sorted((dist / "audio").rglob("*.weba"))

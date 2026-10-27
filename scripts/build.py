@@ -105,6 +105,10 @@ def validate_inputs(inputs: dict, voice_config: dict) -> None:
     if not isinstance(hooks, dict) or not hooks:
         fail("inputs.json: hooks must be a non-empty object")
 
+    source_language = inputs.get("sourceLanguage", "en")
+    if not isinstance(source_language, str) or not source_language:
+        fail("inputs.json: sourceLanguage must be a non-empty string")
+
     group_set = set(groups)
     phrase_ids: list[str] = []
     for phrase in phrases:
@@ -135,28 +139,56 @@ def validate_inputs(inputs: dict, voice_config: dict) -> None:
     if not isinstance(voices, list) or not voices:
         fail("config/voices.json: voices must be a non-empty list")
     voice_ids: list[str] = []
+    voice_languages: set[str] = set()
+    prefix_info = {
+        "af": ("a", "en"),
+        "am": ("a", "en"),
+        "bf": ("b", "en"),
+        "bm": ("b", "en"),
+        "ef": ("e", "es"),
+        "em": ("e", "es"),
+        "pf": ("p", "pt"),
+        "pm": ("p", "pt"),
+        "hf": ("h", "hi"),
+        "hm": ("h", "hi"),
+    }
     for voice in voices:
-        for key in ("id", "accent", "gender", "lang"):
+        for key in ("id", "accent", "gender", "lang", "language"):
             if not voice.get(key):
                 fail(f"config/voices.json: voice missing {key}: {voice!r}")
         voice_id = voice["id"]
         prefix, _, _ = voice_id.partition("_")
-        if prefix not in {"af", "am", "bf", "bm"}:
-            fail(f"config/voices.json: unsupported English voice {voice_id!r}")
-        expected_lang = "a" if prefix in {"af", "am"} else "b"
+        if prefix not in prefix_info:
+            fail(f"config/voices.json: unsupported voice {voice_id!r}")
+        expected_lang, expected_language = prefix_info[prefix]
         if voice["lang"] != expected_lang:
             fail(
                 f"config/voices.json: {voice_id!r} should use lang {expected_lang!r}, "
                 f"not {voice['lang']!r}"
             )
+        if voice["language"] != expected_language:
+            fail(
+                f"config/voices.json: {voice_id!r} should use language "
+                f"{expected_language!r}, not {voice['language']!r}"
+            )
         if voice["gender"] not in {"female", "male"}:
             fail(f"config/voices.json: {voice_id!r} has invalid gender")
         voice_ids.append(voice_id)
+        voice_languages.add(voice["language"])
 
     if len(set(voice_ids)) != len(voice_ids):
         fail("config/voices.json: duplicate voice IDs")
     if voice_config.get("default") not in set(voice_ids):
         fail("config/voices.json: default must name a configured voice")
+
+    for phrase in phrases:
+        translations = phrase.get("translations")
+        for language in sorted(voice_languages - {source_language}):
+            if not isinstance(translations, dict) or not translations.get(language):
+                fail(
+                    f"inputs.json: phrase {phrase['id']!r} needs a "
+                    f"{language!r} translation"
+                )
 
 
 def select_items(items: list[dict], requested: list[str], kind: str) -> list[dict]:
@@ -168,6 +200,18 @@ def select_items(items: list[dict], requested: list[str], kind: str) -> list[dic
         fail(f"unknown {kind}: {unknown}")
     wanted = set(requested)
     return [item for item in items if item["id"] in wanted]
+
+
+def phrase_text(phrase: dict, language: str, source_language: str) -> str:
+    if language == source_language:
+        return phrase["text"]
+    translations = phrase.get("translations")
+    text = translations.get(language) if isinstance(translations, dict) else None
+    if not text:
+        fail(
+            f"inputs.json: phrase {phrase.get('id')!r} has no {language!r} translation"
+        )
+    return text
 
 
 def trim_silence(audio: np.ndarray, sample_rate: int) -> np.ndarray:
@@ -293,13 +337,20 @@ def relative_clip_path(voice_id: str, phrase_id: str, encoder: dict) -> str:
     ).as_posix()
 
 
-def clip_key(phrase: dict, voice: dict, speed: float, encoder: dict) -> str:
+def clip_key(
+    phrase: dict,
+    voice: dict,
+    speed: float,
+    encoder: dict,
+    source_language: str,
+) -> str:
     """Fingerprint everything that affects the bytes of one clip."""
     payload = {
         "version": CLIP_VERSION,
-        "text": phrase["text"],
+        "text": phrase_text(phrase, voice["language"], source_language),
         "voice": voice["id"],
         "accent": voice["accent"],
+        "language": voice["language"],
         "lang": voice["lang"],
         "speed": round(float(speed), 6),
         "model": MODEL_SHA256,
@@ -377,6 +428,7 @@ def reusable_entry(
     phrase: dict,
     speed: float,
     encoder: dict,
+    source_language: str,
 ) -> dict | None:
     if not previous:
         return None
@@ -395,7 +447,7 @@ def reusable_entry(
     if not path.is_file():
         return None
 
-    key = clip_key(phrase, voice, speed, encoder)
+    key = clip_key(phrase, voice, speed, encoder, source_language)
     previous_key = previous_entry.get("clipKey")
     if previous_key:
         if previous_key != key:
@@ -421,9 +473,19 @@ def reusable_entry(
         )
         if previous_phrase is None or previous_voice is None:
             return None
-        if previous_phrase.get("text") != phrase["text"]:
+        previous_translations = previous_phrase.get("translations")
+        previous_text = (
+            previous_phrase.get("text")
+            if voice["language"] == source_language
+            else (
+                previous_translations.get(voice["language"])
+                if isinstance(previous_translations, dict)
+                else None
+            )
+        )
+        if previous_text != phrase_text(phrase, voice["language"], source_language):
             return None
-        for field in ("accent", "gender", "lang"):
+        for field in ("accent", "gender", "lang", "language"):
             if previous_voice.get(field) != voice.get(field):
                 return None
         if previous_build.get("pipeline", {}).get("speed") != speed:
@@ -527,6 +589,8 @@ def make_registry(
                 "generated": generated,
             },
         },
+        "sourceLanguage": inputs.get("sourceLanguage", "en"),
+        "languages": sorted({voice["language"] for voice in voices}),
         "defaultVoice": default_voice,
         "voices": voices,
         "groups": inputs["groups"],
@@ -562,6 +626,7 @@ def main() -> None:
     voice_config = load_json(ROOT / "config" / "voices.json")
     encoder = load_json(ROOT / "config" / "encode.json")
     validate_inputs(inputs, voice_config)
+    source_language = inputs.get("sourceLanguage", "en")
 
     voices = select_items(voice_config["voices"], csv_ids(args.voices), "voice")
     phrases = select_items(inputs["phrases"], csv_ids(args.phrases), "phrase")
@@ -646,7 +711,13 @@ def main() -> None:
             entry = None
             if not args.force:
                 entry = reusable_entry(
-                    out_dir, reuse_source, voice, phrase, args.speed, encoder
+                    out_dir,
+                    reuse_source,
+                    voice,
+                    phrase,
+                    args.speed,
+                    encoder,
+                    source_language,
                 )
             if entry is None:
                 jobs.append((voice, phrase))
@@ -672,7 +743,10 @@ def main() -> None:
             random.seed(seed)
             np.random.seed(seed)
             audio, phonemes = synthesize(
-                pipelines[voice["lang"]], phrase["text"], voice_id, args.speed
+                pipelines[voice["lang"]],
+                phrase_text(phrase, voice["language"], source_language),
+                voice_id,
+                args.speed,
             )
             audio = normalize_audio(audio, SOURCE_RATE)
 
@@ -696,7 +770,9 @@ def main() -> None:
                 "durationMs": duration_ms,
                 "sha256": digest,
                 "phonemes": phonemes,
-                "clipKey": clip_key(phrase, voice, args.speed, encoder),
+                "clipKey": clip_key(
+                    phrase, voice, args.speed, encoder, source_language
+                ),
             }
             files[voice_id][phrase_id] = entry
             cache.setdefault(voice_id, {})[phrase_id] = entry
