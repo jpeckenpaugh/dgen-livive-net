@@ -156,6 +156,13 @@ def validate_inputs(inputs: dict, voice_config: dict) -> None:
         "pm": ("p", "pt"),
         "hf": ("h", "hi"),
         "hm": ("h", "hi"),
+        "ff": ("f", "fr"),
+        "if": ("i", "it"),
+        "im": ("i", "it"),
+        "jf": ("j", "ja"),
+        "jm": ("j", "ja"),
+        "zf": ("z", "zh"),
+        "zm": ("z", "zh"),
     }
     for voice in voices:
         for key in ("id", "accent", "gender", "lang", "language"):

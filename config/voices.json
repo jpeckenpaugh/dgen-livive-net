@@ -198,6 +198,118 @@
       "gender": "male",
       "lang": "h",
       "language": "hi"
+    },
+    {
+      "id": "ff_siwis",
+      "accent": "fr-FR",
+      "gender": "female",
+      "lang": "f",
+      "language": "fr"
+    },
+    {
+      "id": "if_sara",
+      "accent": "it",
+      "gender": "female",
+      "lang": "i",
+      "language": "it"
+    },
+    {
+      "id": "im_nicola",
+      "accent": "it",
+      "gender": "male",
+      "lang": "i",
+      "language": "it"
+    },
+    {
+      "id": "jf_alpha",
+      "accent": "ja",
+      "gender": "female",
+      "lang": "j",
+      "language": "ja"
+    },
+    {
+      "id": "jf_gongitsune",
+      "accent": "ja",
+      "gender": "female",
+      "lang": "j",
+      "language": "ja"
+    },
+    {
+      "id": "jf_nezumi",
+      "accent": "ja",
+      "gender": "female",
+      "lang": "j",
+      "language": "ja"
+    },
+    {
+      "id": "jf_tebukuro",
+      "accent": "ja",
+      "gender": "female",
+      "lang": "j",
+      "language": "ja"
+    },
+    {
+      "id": "jm_kumo",
+      "accent": "ja",
+      "gender": "male",
+      "lang": "j",
+      "language": "ja"
+    },
+    {
+      "id": "zf_xiaobei",
+      "accent": "zh",
+      "gender": "female",
+      "lang": "z",
+      "language": "zh"
+    },
+    {
+      "id": "zf_xiaoni",
+      "accent": "zh",
+      "gender": "female",
+      "lang": "z",
+      "language": "zh"
+    },
+    {
+      "id": "zf_xiaoxiao",
+      "accent": "zh",
+      "gender": "female",
+      "lang": "z",
+      "language": "zh"
+    },
+    {
+      "id": "zf_xiaoyi",
+      "accent": "zh",
+      "gender": "female",
+      "lang": "z",
+      "language": "zh"
+    },
+    {
+      "id": "zm_yunjian",
+      "accent": "zh",
+      "gender": "male",
+      "lang": "z",
+      "language": "zh"
+    },
+    {
+      "id": "zm_yunxi",
+      "accent": "zh",
+      "gender": "male",
+      "lang": "z",
+      "language": "zh"
+    },
+    {
+      "id": "zm_yunxia",
+      "accent": "zh",
+      "gender": "male",
+      "lang": "z",
+      "language": "zh"
+    },
+    {
+      "id": "zm_yunyang",
+      "accent": "zh",
+      "gender": "male",
+      "lang": "z",
+      "language": "zh"
     }
   ]
 }

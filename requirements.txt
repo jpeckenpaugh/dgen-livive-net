@@ -1,3 +1,7 @@
 kokoro==0.9.4
 misaki==0.9.4
+misaki[ja]==0.9.4
+misaki[zh]==0.9.4
+pyopenjtalk==0.4.1
+unidic-lite==1.0.8
 soundfile==0.13.1

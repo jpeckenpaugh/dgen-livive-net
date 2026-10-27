@@ -19,7 +19,11 @@
       "translations": {
         "es": "¡Hola!",
         "pt": "Oi!",
-        "hi": "नमस्ते!"
+        "hi": "नमस्ते!",
+        "fr": "Salut !",
+        "it": "Ciao!",
+        "ja": "やあ！",
+        "zh": "嗨！"
       }
     },
     {
@@ -29,7 +33,11 @@
       "translations": {
         "es": "¡Hola!",
         "pt": "Olá!",
-        "hi": "हैलो!"
+        "hi": "हैलो!",
+        "fr": "Bonjour !",
+        "it": "Ciao!",
+        "ja": "こんにちは！",
+        "zh": "你好！"
       }
     },
     {
@@ -39,7 +47,11 @@
       "translations": {
         "es": "¡Qué bueno verte!",
         "pt": "Que bom te ver!",
-        "hi": "तुम्हें देखकर अच्छा लगा!"
+        "hi": "तुम्हें देखकर अच्छा लगा!",
+        "fr": "Ça fait plaisir de te voir !",
+        "it": "Che bello vederti!",
+        "ja": "会えてうれしいよ！",
+        "zh": "见到你真高兴！"
       }
     },
     {
@@ -49,7 +61,11 @@
       "translations": {
         "es": "¡Hola, amigo!",
         "pt": "Ei, parceiro!",
-        "hi": "अरे, दोस्त!"
+        "hi": "अरे, दोस्त!",
+        "fr": "Salut, mon pote !",
+        "it": "Ehi, amico!",
+        "ja": "やあ、相棒！",
+        "zh": "嘿，伙计！"
       }
     },
     {
@@ -59,7 +75,11 @@
       "translations": {
         "es": "¿Quieres que seamos amigos?",
         "pt": "Quer ser meu amigo?",
-        "hi": "क्या हम दोस्त बन सकते हैं?"
+        "hi": "क्या हम दोस्त बन सकते हैं?",
+        "fr": "On devient amis ?",
+        "it": "Vuoi essere mio amico?",
+        "ja": "友だちにならない？",
+        "zh": "想交个朋友吗？"
       }
     },
     {
@@ -69,7 +89,11 @@
       "translations": {
         "es": "¡Genial!",
         "pt": "Eba!",
-        "hi": "वाह!"
+        "hi": "वाह!",
+        "fr": "Youpi !",
+        "it": "Evviva!",
+        "ja": "やったー！",
+        "zh": "太好了！"
       }
     },
     {
@@ -79,7 +103,11 @@
       "translations": {
         "es": "Vamos a jugar.",
         "pt": "Vamos jogar.",
-        "hi": "चलो खेलते हैं।"
+        "hi": "चलो खेलते हैं।",
+        "fr": "On joue ?",
+        "it": "Facciamo una partita.",
+        "ja": "ゲームしよう。",
+        "zh": "来玩个游戏吧。"
       }
     },
     {
@@ -89,7 +117,11 @@
       "translations": {
         "es": "¿Tienes tiempo para una partida?",
         "pt": "Tem tempo para uma partida?",
-        "hi": "एक राउंड के लिए समय है?"
+        "hi": "एक राउंड के लिए समय है?",
+        "fr": "T'as le temps d'une partie ?",
+        "it": "Hai tempo per una partita?",
+        "ja": "一戦やる時間ある？",
+        "zh": "有空玩一局吗？"
       }
     },
     {
@@ -99,7 +131,11 @@
       "translations": {
         "es": "¡Mira esto!",
         "pt": "Olha isso!",
-        "hi": "यह देखो!"
+        "hi": "यह देखो!",
+        "fr": "Regarde ça !",
+        "it": "Guarda qui!",
+        "ja": "見てて！",
+        "zh": "看好了！"
       }
     },
     {
@@ -109,7 +145,11 @@
       "translations": {
         "es": "¡Bien hecho!",
         "pt": "Mandou bem!",
-        "hi": "बढ़िया!"
+        "hi": "बढ़िया!",
+        "fr": "Joli !",
+        "it": "Bel colpo!",
+        "ja": "いいね！",
+        "zh": "漂亮！"
       }
     },
     {
@@ -119,7 +159,11 @@
       "translations": {
         "es": "¡Bien jugado!",
         "pt": "Bem jogado!",
-        "hi": "अच्छा खेला!"
+        "hi": "अच्छा खेला!",
+        "fr": "Bien joué !",
+        "it": "Ben giocato!",
+        "ja": "ナイスプレー！",
+        "zh": "打得好！"
       }
     },
     {
@@ -129,7 +173,11 @@
       "translations": {
         "es": "¡Me venciste!",
         "pt": "Você me venceu!",
-        "hi": "तुमने मुझे हरा दिया!"
+        "hi": "तुमने मुझे हरा दिया!",
+        "fr": "Tu m'as eu !",
+        "it": "Mi hai battuto!",
+        "ja": "やられた！",
+        "zh": "被你打败了！"
       }
     },
     {
@@ -139,7 +187,11 @@
       "translations": {
         "es": "¡Buena partida!",
         "pt": "Boa partida!",
-        "hi": "अच्छा खेल!"
+        "hi": "अच्छा खेल!",
+        "fr": "Belle partie !",
+        "it": "Bella partita!",
+        "ja": "いい勝負だった！",
+        "zh": "这局真不错！"
       }
     },
     {
@@ -149,7 +201,11 @@
       "translations": {
         "es": "¡Casi!",
         "pt": "Quase!",
-        "hi": "बहुत करीब!"
+        "hi": "बहुत करीब!",
+        "fr": "Presque !",
+        "it": "Quasi!",
+        "ja": "おしかった！",
+        "zh": "差一点！"
       }
     },
     {
@@ -159,7 +215,11 @@
       "translations": {
         "es": "¡Qué difícil!",
         "pt": "Essa foi difícil!",
-        "hi": "यह तो मुश्किल था!"
+        "hi": "यह तो मुश्किल था!",
+        "fr": "C'était serré !",
+        "it": "Che partita tosta!",
+        "ja": "手ごわかった！",
+        "zh": "真难打！"
       }
     },
     {
@@ -169,7 +229,11 @@
       "translations": {
         "es": "¡Buen día!",
         "pt": "Que dia bom!",
-        "hi": "क्या अच्छा दिन है!"
+        "hi": "क्या अच्छा दिन है!",
+        "fr": "Belle journée !",
+        "it": "Che bella giornata!",
+        "ja": "いい天気だね！",
+        "zh": "天气真好！"
       }
     },
     {
@@ -179,7 +243,11 @@
       "translations": {
         "es": "No hay problema.",
         "pt": "Sem problema.",
-        "hi": "कोई बात नहीं।"
+        "hi": "कोई बात नहीं।",
+        "fr": "Pas de souci.",
+        "it": "Nessun problema.",
+        "ja": "気にしないで。",
+        "zh": "没关系。"
       }
     },
     {
@@ -189,7 +257,11 @@
       "translations": {
         "es": "¿Quieres jugar otra vez?",
         "pt": "Quer jogar de novo?",
-        "hi": "फिर से खेलें?"
+        "hi": "फिर से खेलें?",
+        "fr": "On remet ça ?",
+        "it": "Rigiochiamo?",
+        "ja": "もう一回やる？",
+        "zh": "再来一局？"
       }
     },
     {
@@ -199,7 +271,11 @@
       "translations": {
         "es": "Quizás la próxima vez.",
         "pt": "Talvez na próxima.",
-        "hi": "शायद अगली बार।"
+        "hi": "शायद अगली बार।",
+        "fr": "Une prochaine fois, peut-être.",
+        "it": "Magari la prossima volta.",
+        "ja": "また今度ね。",
+        "zh": "下次吧。"
       }
     },
     {
@@ -209,7 +285,11 @@
       "translations": {
         "es": "Hasta la próxima.",
         "pt": "Até a próxima.",
-        "hi": "अगली बार मिलते हैं।"
+        "hi": "अगली बार मिलते हैं।",
+        "fr": "À la prochaine !",
+        "it": "Ci vediamo la prossima volta.",
+        "ja": "じゃあ、またね！",
+        "zh": "下次见！"
       }
     },
     {
@@ -220,7 +300,11 @@
       "translations": {
         "es": "¡Hola!",
         "pt": "E aí!",
-        "hi": "हाय!"
+        "hi": "हाय!",
+        "fr": "Coucou !",
+        "it": "Ehilà!",
+        "ja": "やっほー！",
+        "zh": "嗨呀！"
       }
     },
     {
@@ -231,7 +315,11 @@
       "translations": {
         "es": "¿Te animas a jugar?",
         "pt": "Tá a fim de jogar?",
-        "hi": "खेलने का मन है?"
+        "hi": "खेलने का मन है?",
+        "fr": "Ça te dit, une partie ?",
+        "it": "Ti va una partita?",
+        "ja": "ゲームしない？",
+        "zh": "想玩一局吗？"
       }
     },
     {
@@ -242,7 +330,11 @@
       "translations": {
         "es": "¿Otra vez?",
         "pt": "Mais uma?",
-        "hi": "एक और?"
+        "hi": "एक और?",
+        "fr": "Encore une ?",
+        "it": "Ancora una?",
+        "ja": "もう一回？",
+        "zh": "再来一次？"
       }
     },
     {
@@ -253,7 +345,11 @@
       "translations": {
         "es": "¡Hasta luego!",
         "pt": "Até mais!",
-        "hi": "फिर मिलेंगे!"
+        "hi": "फिर मिलेंगे!",
+        "fr": "À plus !",
+        "it": "Ci vediamo dopo!",
+        "ja": "またあとで！",
+        "zh": "回头见！"
       }
     },
     {
@@ -264,7 +360,11 @@
       "translations": {
         "es": "¡Ahora somos amigos!",
         "pt": "Agora somos amigos!",
-        "hi": "अब हम दोस्त हैं!"
+        "hi": "अब हम दोस्त हैं!",
+        "fr": "On est amis maintenant !",
+        "it": "Ora siamo amici!",
+        "ja": "これで友だちだね！",
+        "zh": "我们现在是朋友了！"
       }
     },
     {
@@ -275,7 +375,11 @@
       "translations": {
         "es": "¡Buena suerte!",
         "pt": "Boa sorte!",
-        "hi": "शुभकामनाएँ!"
+        "hi": "शुभकामनाएँ!",
+        "fr": "Bonne chance !",
+        "it": "Buona fortuna!",
+        "ja": "がんばって！",
+        "zh": "祝你好运！"
       }
     }
   ],

@@ -2,12 +2,17 @@ SHELL := /bin/bash
 OUT ?= dist
 PORT ?= 8080
 VOICES ?=
+WORKERS ?= 4
 
-.PHONY: build rebuild reproducible build-one prefetch validate serve shell clean
+.PHONY: build build-parallel rebuild reproducible build-one prefetch validate serve shell clean
 
 build:
 	docker compose build
 	docker compose run --rm builder --out /out
+
+build-parallel:
+	docker compose build
+	python3 scripts/parallel_build.py --out "$(OUT)" --workers "$(WORKERS)" --prefetch
 
 rebuild:
 	docker compose run --rm builder --out /out --force
