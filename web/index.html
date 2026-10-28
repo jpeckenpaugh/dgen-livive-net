@@ -72,6 +72,101 @@
       gap: 16px;
       align-items: end;
     }
+    .voice-panel { overflow: hidden; }
+    .voice-head { align-items: flex-start; }
+    .voice-head .panel-head p { margin-top: 3px; }
+    .filter-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin: 14px 0 16px;
+    }
+    .filter-group {
+      min-width: 0;
+      margin: 0;
+      padding: 10px 12px 11px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(0, 0, 0, .12);
+    }
+    .filter-group legend {
+      padding: 0 5px;
+      color: var(--muted);
+      font: 600 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .checks {
+      display: grid;
+      gap: 5px;
+      max-height: 148px;
+      overflow: auto;
+      padding-right: 3px;
+    }
+    .check {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-height: 23px;
+      color: var(--text);
+      font-size: 13px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .check input {
+      flex: 0 0 auto;
+      margin: 0;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .check .count {
+      margin-left: auto;
+      color: var(--muted);
+      font: 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+    .advanced {
+      margin-top: 4px;
+    }
+    .advanced summary {
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 12px;
+      line-height: 1.4;
+      list-style-position: outside;
+    }
+    .advanced summary span {
+      color: var(--muted);
+      font: 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+    }
+    .advanced[open] summary { margin-bottom: 7px; }
+    .hint {
+      margin: 0 0 8px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .voice-row {
+      display: grid;
+      grid-template-columns: minmax(260px, 1fr) auto;
+      gap: 16px;
+      align-items: end;
+    }
+    .voice-row .actions { align-self: end; }
+    .empty-state {
+      margin-top: 18px;
+      color: var(--muted);
+      text-align: center;
+      padding: 34px 18px;
+    }
+    .empty-state h2 {
+      margin: 0 0 6px;
+      color: var(--text);
+      font-size: 18px;
+      letter-spacing: -.01em;
+    }
+    .empty-state p { margin: 0; font-size: 13px; }
     .field { display: grid; gap: 7px; }
     .field label, .panel h2 {
       margin: 0;
@@ -214,11 +309,18 @@
       padding: 8px 12px;
       font-size: 13px;
     }
+    @media (max-width: 980px) {
+      .filter-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .voice-row { grid-template-columns: minmax(220px, 1fr) auto; }
+    }
     @media (max-width: 640px) {
       .controls { grid-template-columns: 1fr; }
+      .filter-grid { grid-template-columns: 1fr; }
+      .voice-row { grid-template-columns: 1fr; }
       .actions { justify-content: stretch; }
       .actions button { flex: 1; }
       .panel { padding: 14px; }
+      .checks { max-height: none; }
     }
   </style>
 </head>
@@ -230,14 +332,47 @@
   </header>
 
   <main>
-    <section class="panel controls">
-      <div class="field">
-        <label for="voice">Voice</label>
-        <select id="voice" aria-label="Voice"></select>
+    <section class="panel voice-panel">
+      <div class="panel-head voice-head">
+        <div>
+          <h2>Voice selection</h2>
+          <p id="voiceSummary">Loading voices…</p>
+        </div>
+        <button id="clearFilters" class="ghost" type="button">Clear filters</button>
       </div>
-      <div class="actions">
-        <button id="playAll" class="primary" type="button">Play all</button>
-        <button id="stop" class="ghost" type="button">Stop</button>
+
+      <div class="filter-grid">
+        <fieldset class="filter-group">
+          <legend>Language</legend>
+          <div id="languageFilters" class="checks"></div>
+        </fieldset>
+        <fieldset class="filter-group">
+          <legend>Gender</legend>
+          <div id="genderFilters" class="checks"></div>
+        </fieldset>
+        <fieldset class="filter-group">
+          <legend>Locale / Region</legend>
+          <div id="localeFilters" class="checks"></div>
+        </fieldset>
+        <fieldset class="filter-group">
+          <legend>Source grade</legend>
+          <details class="advanced">
+            <summary>Training-data estimate <span>English only</span></summary>
+            <p class="hint">Kokoro’s source grade describes training data, not voice quality or intelligibility.</p>
+            <div id="gradeFilters" class="checks"></div>
+          </details>
+        </fieldset>
+      </div>
+
+      <div class="voice-row">
+        <div class="field">
+          <label for="voice">Voice <span id="visibleCount"></span></label>
+          <select id="voice" aria-label="Voice"></select>
+        </div>
+        <div class="actions">
+          <button id="playAll" class="primary" type="button">Play all</button>
+          <button id="stop" class="ghost" type="button">Stop</button>
+        </div>
       </div>
       <div class="status" id="status">Ready.</div>
     </section>
@@ -272,12 +407,30 @@
     const phraseGroups = $('#phraseGroups');
     const buildMeta = $('#buildMeta');
     const hookResult = $('#hookResult');
+    const voiceSummary = $('#voiceSummary');
+    const visibleCount = $('#visibleCount');
+    const clearFiltersButton = $('#clearFilters');
 
     const phraseById = Object.fromEntries(registry.phrases.map((phrase) => [phrase.id, phrase]));
     const voiceById = Object.fromEntries(registry.voices.map((voice) => [voice.id, voice]));
+    const LANGUAGE_LABELS = {
+      en: 'English', es: 'Spanish', pt: 'Portuguese', hi: 'Hindi',
+      fr: 'French', it: 'Italian', ja: 'Japanese', zh: 'Mandarin',
+    };
+    const GRADE_ORDER = ['A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F+', 'F'];
+    const UNRATED = '__unrated__';
+    const FILTER_KEYS = ['language', 'gender', 'locale', 'grade'];
+    const filterContainers = {
+      language: $('#languageFilters'),
+      gender: $('#genderFilters'),
+      locale: $('#localeFilters'),
+      grade: $('#gradeFilters'),
+    };
+    const filterInputs = { language: [], gender: [], locale: [], grade: [] };
     const state = {
       voice: registry.defaultVoice || registry.voices[0]?.id || null,
       queue: [],
+      filters: { language: new Set(), gender: new Set(), locale: new Set(), grade: new Set() },
     };
 
     const currentVoice = () => voiceById[state.voice] || null;
@@ -300,7 +453,33 @@
     };
 
     const voiceLabel = (voice) =>
-      `${voice.id} · ${voice.gender}${voice.grade ? ` · ${voice.grade}` : ''}`;
+      `${voice.id} · ${voice.gender} · ${voice.country || voice.accent}`;
+
+    const gradeValue = (voice) => voice.grade || UNRATED;
+
+    const valueForFilter = (key, voice) => ({
+      language: voice.language,
+      gender: voice.gender,
+      locale: voice.country || voice.accent,
+      grade: gradeValue(voice),
+    }[key]);
+
+    const matchesVoice = (voice, ignoreKey = null) =>
+      FILTER_KEYS.every((key) => {
+        if (key === ignoreKey) return true;
+        const selected = state.filters[key];
+        return selected.size === 0 || selected.has(valueForFilter(key, voice));
+      });
+
+    const compareVoices = (left, right) => {
+      const leftLanguage = LANGUAGE_LABELS[left.language] || left.language;
+      const rightLanguage = LANGUAGE_LABELS[right.language] || right.language;
+      const languageOrder = leftLanguage.localeCompare(rightLanguage);
+      return languageOrder || left.id.localeCompare(right.id);
+    };
+
+    const visibleVoices = () =>
+      registry.voices.filter((voice) => matchesVoice(voice)).sort(compareVoices);
 
     const entryFor = (phraseId) =>
       registry.files?.[state.voice]?.[phraseId] || null;
@@ -328,16 +507,82 @@
       document.title = `dgen-livive-net · ${totals.clips} clips`;
     }
 
-    function renderVoices() {
-      const groups = new Map();
-      for (const voice of registry.voices) {
-        if (!groups.has(voice.accent)) groups.set(voice.accent, []);
-        groups.get(voice.accent).push(voice);
+    function optionLabel(key, value) {
+      if (key === 'language') return LANGUAGE_LABELS[value] || value;
+      if (key === 'gender') return value.charAt(0).toUpperCase() + value.slice(1);
+      if (key === 'grade') return value === UNRATED ? 'Unrated' : value;
+      return value;
+    }
+
+    function filterOptions(key) {
+      const values = [...new Set(registry.voices.map((voice) => valueForFilter(key, voice)))];
+      if (key === 'grade') {
+        const rank = (value) => value === UNRATED ? GRADE_ORDER.length : GRADE_ORDER.indexOf(value);
+        values.sort((left, right) => rank(left) - rank(right));
+      } else {
+        values.sort((left, right) => optionLabel(key, left).localeCompare(optionLabel(key, right)));
       }
-      for (const [accent, voices] of groups) {
+      return values;
+    }
+
+    function countFor(key, value) {
+      return registry.voices.filter(
+        (voice) => matchesVoice(voice, key) && valueForFilter(key, voice) === value,
+      ).length;
+    }
+
+    function buildFilterGroup(key) {
+      const container = filterContainers[key];
+      container.replaceChildren();
+      filterInputs[key] = [];
+      for (const value of filterOptions(key)) {
+        const label = document.createElement('label');
+        label.className = 'check';
+        const input = document.createElement('input');
+        input.type = 'checkbox';
+        input.value = value;
+        input.checked = state.filters[key].has(value);
+        input.addEventListener('change', () => {
+          if (input.checked) state.filters[key].add(value);
+          else state.filters[key].delete(value);
+          applyFilters();
+        });
+        const text = document.createElement('span');
+        text.textContent = optionLabel(key, value);
+        const count = document.createElement('span');
+        count.className = 'count';
+        label.append(input, text, count);
+        container.append(label);
+        filterInputs[key].push({ value, input, count });
+      }
+    }
+
+    function updateFilterCounts() {
+      for (const key of FILTER_KEYS) {
+        for (const item of filterInputs[key]) {
+          item.count.textContent = countFor(key, item.value);
+        }
+      }
+    }
+
+    function buildFilterOptions() {
+      for (const key of FILTER_KEYS) buildFilterGroup(key);
+    }
+
+    function renderVoiceOptions(voices) {
+      const groups = new Map();
+      for (const voice of voices) {
+        if (!groups.has(voice.language)) groups.set(voice.language, []);
+        groups.get(voice.language).push(voice);
+      }
+      const languages = [...groups.keys()].sort((left, right) =>
+        (LANGUAGE_LABELS[left] || left).localeCompare(LANGUAGE_LABELS[right] || right),
+      );
+      voiceSelect.replaceChildren();
+      for (const language of languages) {
         const optgroup = document.createElement('optgroup');
-        optgroup.label = accent;
-        for (const voice of voices) {
+        optgroup.label = LANGUAGE_LABELS[language] || language;
+        for (const voice of groups.get(language)) {
           const option = document.createElement('option');
           option.value = voice.id;
           option.textContent = voiceLabel(voice);
@@ -345,7 +590,29 @@
         }
         voiceSelect.append(optgroup);
       }
-      if (state.voice) voiceSelect.value = state.voice;
+    }
+
+    function applyFilters() {
+      const visible = visibleVoices();
+      renderVoiceOptions(visible);
+      voiceSummary.textContent = `${visible.length} of ${registry.voices.length} voices match`;
+      visibleCount.textContent = `· ${visible.length} of ${registry.voices.length}`;
+      const hasVoices = visible.length > 0;
+      voiceSelect.disabled = !hasVoices;
+      $('#playAll').disabled = !hasVoices;
+      $('#playHook').disabled = !hasVoices;
+      if (!hasVoices) {
+        state.voice = null;
+        voiceSelect.value = '';
+        setStatus('No voices match the current filters.', 'error');
+      } else {
+        if (!visible.some((voice) => voice.id === state.voice)) {
+          state.voice = visible[0].id;
+        }
+        voiceSelect.value = state.voice;
+      }
+      renderPhrases();
+      updateFilterCounts();
     }
 
     function renderHooks() {
@@ -358,6 +625,15 @@
     }
 
     function renderPhrases() {
+      if (!currentVoice()) {
+        phraseGroups.innerHTML = `
+          <section class="panel empty-state">
+            <h2>No voices match</h2>
+            <p>Clear or change the filters to choose a voice.</p>
+          </section>
+        `;
+        return;
+      }
       phraseGroups.replaceChildren();
       for (const group of registry.groups) {
         const phrases = registry.phrases.filter((phrase) => phrase.group === group);
@@ -473,6 +749,14 @@
       renderPhrases();
       setStatus(`Voice: ${state.voice}`);
     });
+    clearFiltersButton.addEventListener('click', () => {
+      for (const key of FILTER_KEYS) state.filters[key].clear();
+      for (const key of FILTER_KEYS) {
+        for (const item of filterInputs[key]) item.input.checked = false;
+      }
+      applyFilters();
+      if (currentVoice()) setStatus('Filters cleared.', 'ok');
+    });
     $('#playAll').addEventListener('click', playAll);
     $('#stop').addEventListener('click', stopPlayback);
     $('#playHook').addEventListener('click', playRandomHook);
@@ -485,12 +769,14 @@
     });
 
     renderBuildMeta();
-    renderVoices();
+    buildFilterOptions();
+    applyFilters();
     renderHooks();
-    renderPhrases();
 
     const totals = registry.build.totals;
-    setStatus(`Ready. ${totals.clips} clips across ${totals.voices} voices.`, 'ok');
+    if (currentVoice()) {
+      setStatus(`Ready. ${totals.clips} clips across ${totals.voices} voices.`, 'ok');
+    }
   </script>
 </body>
 </html>

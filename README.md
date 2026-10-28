@@ -4,9 +4,9 @@ Docker + GitHub Actions bake of pre-rendered Kokoro voice lines. Every phrase ×
 
 ## What is built
 
-- **42 voices** — 16 English (8 US, 8 UK), 3 Spanish, 3 Brazilian Portuguese, 4 Hindi, 1 French, 2 Italian, 5 Japanese, and 8 Mandarin.
+- **54 voices** — 28 English (20 US, 8 UK), 3 Spanish, 3 Brazilian Portuguese, 4 Hindi, 1 French, 2 Italian, 5 Japanese, and 8 Mandarin.
 - **26 phrases** from `inputs.json`, translated into English, Spanish, Brazilian Portuguese, Hindi, French, Italian, Japanese, and Mandarin.
-- **1,092 clips** in total: 416 English + 78 Spanish + 78 Portuguese + 104 Hindi + 26 French + 52 Italian + 130 Japanese + 208 Mandarin.
+- **1,404 clips** in total: 728 English + 78 Spanish + 78 Portuguese + 104 Hindi + 26 French + 52 Italian + 130 Japanese + 208 Mandarin.
 - **Opus 32 kbps mono** in a WebM container with a `.weba` extension.
   - `.weba` is intentional: GitHub Pages serves it as `audio/webm`, while `.webm` would be `video/webm`.
 - Audio is normalized, trimmed, and written with plain filenames. `dist/` is a build artifact and is not committed.
@@ -15,7 +15,7 @@ Docker + GitHub Actions bake of pre-rendered Kokoro voice lines. Every phrase ×
 
 ```text
 inputs.json              phrases, translations, groups, and hooks
-config/voices.json       the selected 42 voices, languages, and language codes
+config/voices.json       the selected 54 voices, languages, and language codes
 config/encode.json       Opus/WebM encoding settings
 scripts/build.py         synthesis + ffmpeg encoding + registry generation
 scripts/parallel_build.py runs voice shards concurrently and merges them
@@ -110,7 +110,7 @@ make serve
 
 | Accent | Female | Male |
 |---|---|---|
-| US | `af_heart`, `af_bella`, `af_nicole`, `af_aoede` | `am_fenrir`, `am_michael`, `am_puck`, `am_onyx` |
+| US | `af_heart`, `af_bella`, `af_nicole`, `af_aoede`, `af_alloy`, `af_jessica`, `af_kore`, `af_nova`, `af_river`, `af_sarah`, `af_sky` | `am_fenrir`, `am_michael`, `am_puck`, `am_onyx`, `am_adam`, `am_echo`, `am_eric`, `am_liam`, `am_santa` |
 | UK | `bf_emma`, `bf_isabella`, `bf_alice`, `bf_lily` | `bm_fable`, `bm_george`, `bm_lewis`, `bm_daniel` |
 | Spanish | `ef_dora` | `em_alex`, `em_santa` |
 | Brazilian Portuguese | `pf_dora` | `pm_alex`, `pm_santa` |
@@ -121,3 +121,5 @@ make serve
 | Mandarin Chinese | `zf_xiaobei`, `zf_xiaoni`, `zf_xiaoxiao`, `zf_xiaoyi` | `zm_yunjian`, `zm_yunxi`, `zm_yunxia`, `zm_yunyang` |
 
 Kokoro is weakest on very short utterances; these lines are 1–6 words, so audition before treating the bake as final. Non-English support is thinner than English: Spanish, Portuguese, Hindi, French, and Italian use eSpeak NG fallback phonemization, while Japanese and Mandarin use `misaki` G2P dictionaries. Check all non-English lines carefully, especially Japanese kanji readings/pitch accent and Mandarin tone sandhi, polyphones, and punctuation pauses.
+
+The test page filters voices by language, gender, locale/region, and an optional advanced source-grade filter. Voices are grouped by language and alphabetized by ID. The source grade is Kokoro’s training-data estimate, not an intelligibility or voice-quality score, and is not shown in the voice label.

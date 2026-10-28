@@ -7,7 +7,9 @@
       "gender": "female",
       "lang": "a",
       "grade": "A",
-      "language": "en"
+      "language": "en",
+      "locale": "en-US",
+      "country": "United States"
     },
     {
       "id": "af_bella",
@@ -15,7 +17,9 @@
       "gender": "female",
       "lang": "a",
       "grade": "A-",
-      "language": "en"
+      "language": "en",
+      "locale": "en-US",
+      "country": "United States"
     },
     {
       "id": "af_nicole",
@@ -23,7 +27,9 @@
       "gender": "female",
       "lang": "a",
       "grade": "B-",
-      "language": "en"
+      "language": "en",
+      "locale": "en-US",
+      "country": "United States"
     },
     {
       "id": "af_aoede",
@@ -31,7 +37,9 @@
       "gender": "female",
       "lang": "a",
       "grade": "C+",
-      "language": "en"
+      "language": "en",
+      "locale": "en-US",
+      "country": "United States"
     },
     {
       "id": "am_fenrir",
@@ -39,7 +47,9 @@
       "gender": "male",
       "lang": "a",
       "grade": "C+",
-      "language": "en"
+      "language": "en",
+      "locale": "en-US",
+      "country": "United States"
     },
     {
       "id": "am_michael",
@@ -47,7 +57,9 @@
       "gender": "male",
       "lang": "a",
       "grade": "C+",
-      "language": "en"
+      "language": "en",
+      "locale": "en-US",
+      "country": "United States"
     },
     {
       "id": "am_puck",
@@ -55,7 +67,9 @@
       "gender": "male",
       "lang": "a",
       "grade": "C+",
-      "language": "en"
+      "language": "en",
+      "locale": "en-US",
+      "country": "United States"
     },
     {
       "id": "am_onyx",
@@ -63,7 +77,9 @@
       "gender": "male",
       "lang": "a",
       "grade": "D",
-      "language": "en"
+      "language": "en",
+      "locale": "en-US",
+      "country": "United States"
     },
     {
       "id": "bf_emma",
@@ -71,7 +87,9 @@
       "gender": "female",
       "lang": "b",
       "grade": "B-",
-      "language": "en"
+      "language": "en",
+      "locale": "en-GB",
+      "country": "United Kingdom"
     },
     {
       "id": "bf_isabella",
@@ -79,7 +97,9 @@
       "gender": "female",
       "lang": "b",
       "grade": "C",
-      "language": "en"
+      "language": "en",
+      "locale": "en-GB",
+      "country": "United Kingdom"
     },
     {
       "id": "bf_alice",
@@ -87,7 +107,9 @@
       "gender": "female",
       "lang": "b",
       "grade": "D",
-      "language": "en"
+      "language": "en",
+      "locale": "en-GB",
+      "country": "United Kingdom"
     },
     {
       "id": "bf_lily",
@@ -95,7 +117,9 @@
       "gender": "female",
       "lang": "b",
       "grade": "D",
-      "language": "en"
+      "language": "en",
+      "locale": "en-GB",
+      "country": "United Kingdom"
     },
     {
       "id": "bm_fable",
@@ -103,7 +127,9 @@
       "gender": "male",
       "lang": "b",
       "grade": "C",
-      "language": "en"
+      "language": "en",
+      "locale": "en-GB",
+      "country": "United Kingdom"
     },
     {
       "id": "bm_george",
@@ -111,7 +137,9 @@
       "gender": "male",
       "lang": "b",
       "grade": "C",
-      "language": "en"
+      "language": "en",
+      "locale": "en-GB",
+      "country": "United Kingdom"
     },
     {
       "id": "bm_lewis",
@@ -119,7 +147,9 @@
       "gender": "male",
       "lang": "b",
       "grade": "D+",
-      "language": "en"
+      "language": "en",
+      "locale": "en-GB",
+      "country": "United Kingdom"
     },
     {
       "id": "bm_daniel",
@@ -127,189 +157,363 @@
       "gender": "male",
       "lang": "b",
       "grade": "D",
-      "language": "en"
+      "language": "en",
+      "locale": "en-GB",
+      "country": "United Kingdom"
     },
     {
       "id": "ef_dora",
       "accent": "es",
       "gender": "female",
       "lang": "e",
-      "language": "es"
+      "language": "es",
+      "locale": "es",
+      "country": "Spanish (region unspecified)"
     },
     {
       "id": "em_alex",
       "accent": "es",
       "gender": "male",
       "lang": "e",
-      "language": "es"
+      "language": "es",
+      "locale": "es",
+      "country": "Spanish (region unspecified)"
     },
     {
       "id": "em_santa",
       "accent": "es",
       "gender": "male",
       "lang": "e",
-      "language": "es"
+      "language": "es",
+      "locale": "es",
+      "country": "Spanish (region unspecified)"
     },
     {
       "id": "pf_dora",
       "accent": "pt-BR",
       "gender": "female",
       "lang": "p",
-      "language": "pt"
+      "language": "pt",
+      "locale": "pt-BR",
+      "country": "Brazil"
     },
     {
       "id": "pm_alex",
       "accent": "pt-BR",
       "gender": "male",
       "lang": "p",
-      "language": "pt"
+      "language": "pt",
+      "locale": "pt-BR",
+      "country": "Brazil"
     },
     {
       "id": "pm_santa",
       "accent": "pt-BR",
       "gender": "male",
       "lang": "p",
-      "language": "pt"
+      "language": "pt",
+      "locale": "pt-BR",
+      "country": "Brazil"
     },
     {
       "id": "hf_alpha",
       "accent": "hi",
       "gender": "female",
       "lang": "h",
-      "language": "hi"
+      "language": "hi",
+      "locale": "hi-IN",
+      "country": "India"
     },
     {
       "id": "hf_beta",
       "accent": "hi",
       "gender": "female",
       "lang": "h",
-      "language": "hi"
+      "language": "hi",
+      "locale": "hi-IN",
+      "country": "India"
     },
     {
       "id": "hm_omega",
       "accent": "hi",
       "gender": "male",
       "lang": "h",
-      "language": "hi"
+      "language": "hi",
+      "locale": "hi-IN",
+      "country": "India"
     },
     {
       "id": "hm_psi",
       "accent": "hi",
       "gender": "male",
       "lang": "h",
-      "language": "hi"
+      "language": "hi",
+      "locale": "hi-IN",
+      "country": "India"
     },
     {
       "id": "ff_siwis",
       "accent": "fr-FR",
       "gender": "female",
       "lang": "f",
-      "language": "fr"
+      "language": "fr",
+      "locale": "fr-FR",
+      "country": "France"
     },
     {
       "id": "if_sara",
       "accent": "it",
       "gender": "female",
       "lang": "i",
-      "language": "it"
+      "language": "it",
+      "locale": "it-IT",
+      "country": "Italy"
     },
     {
       "id": "im_nicola",
       "accent": "it",
       "gender": "male",
       "lang": "i",
-      "language": "it"
+      "language": "it",
+      "locale": "it-IT",
+      "country": "Italy"
     },
     {
       "id": "jf_alpha",
       "accent": "ja",
       "gender": "female",
       "lang": "j",
-      "language": "ja"
+      "language": "ja",
+      "locale": "ja-JP",
+      "country": "Japan"
     },
     {
       "id": "jf_gongitsune",
       "accent": "ja",
       "gender": "female",
       "lang": "j",
-      "language": "ja"
+      "language": "ja",
+      "locale": "ja-JP",
+      "country": "Japan"
     },
     {
       "id": "jf_nezumi",
       "accent": "ja",
       "gender": "female",
       "lang": "j",
-      "language": "ja"
+      "language": "ja",
+      "locale": "ja-JP",
+      "country": "Japan"
     },
     {
       "id": "jf_tebukuro",
       "accent": "ja",
       "gender": "female",
       "lang": "j",
-      "language": "ja"
+      "language": "ja",
+      "locale": "ja-JP",
+      "country": "Japan"
     },
     {
       "id": "jm_kumo",
       "accent": "ja",
       "gender": "male",
       "lang": "j",
-      "language": "ja"
+      "language": "ja",
+      "locale": "ja-JP",
+      "country": "Japan"
     },
     {
       "id": "zf_xiaobei",
       "accent": "zh",
       "gender": "female",
       "lang": "z",
-      "language": "zh"
+      "language": "zh",
+      "locale": "zh-CN",
+      "country": "China"
     },
     {
       "id": "zf_xiaoni",
       "accent": "zh",
       "gender": "female",
       "lang": "z",
-      "language": "zh"
+      "language": "zh",
+      "locale": "zh-CN",
+      "country": "China"
     },
     {
       "id": "zf_xiaoxiao",
       "accent": "zh",
       "gender": "female",
       "lang": "z",
-      "language": "zh"
+      "language": "zh",
+      "locale": "zh-CN",
+      "country": "China"
     },
     {
       "id": "zf_xiaoyi",
       "accent": "zh",
       "gender": "female",
       "lang": "z",
-      "language": "zh"
+      "language": "zh",
+      "locale": "zh-CN",
+      "country": "China"
     },
     {
       "id": "zm_yunjian",
       "accent": "zh",
       "gender": "male",
       "lang": "z",
-      "language": "zh"
+      "language": "zh",
+      "locale": "zh-CN",
+      "country": "China"
     },
     {
       "id": "zm_yunxi",
       "accent": "zh",
       "gender": "male",
       "lang": "z",
-      "language": "zh"
+      "language": "zh",
+      "locale": "zh-CN",
+      "country": "China"
     },
     {
       "id": "zm_yunxia",
       "accent": "zh",
       "gender": "male",
       "lang": "z",
-      "language": "zh"
+      "language": "zh",
+      "locale": "zh-CN",
+      "country": "China"
     },
     {
       "id": "zm_yunyang",
       "accent": "zh",
       "gender": "male",
       "lang": "z",
-      "language": "zh"
+      "language": "zh",
+      "locale": "zh-CN",
+      "country": "China"
+    },
+    {
+      "id": "af_alloy",
+      "accent": "en-US",
+      "locale": "en-US",
+      "country": "United States",
+      "gender": "female",
+      "lang": "a",
+      "grade": "C",
+      "language": "en"
+    },
+    {
+      "id": "af_jessica",
+      "accent": "en-US",
+      "locale": "en-US",
+      "country": "United States",
+      "gender": "female",
+      "lang": "a",
+      "grade": "D",
+      "language": "en"
+    },
+    {
+      "id": "af_kore",
+      "accent": "en-US",
+      "locale": "en-US",
+      "country": "United States",
+      "gender": "female",
+      "lang": "a",
+      "grade": "C+",
+      "language": "en"
+    },
+    {
+      "id": "af_nova",
+      "accent": "en-US",
+      "locale": "en-US",
+      "country": "United States",
+      "gender": "female",
+      "lang": "a",
+      "grade": "C",
+      "language": "en"
+    },
+    {
+      "id": "af_river",
+      "accent": "en-US",
+      "locale": "en-US",
+      "country": "United States",
+      "gender": "female",
+      "lang": "a",
+      "grade": "D",
+      "language": "en"
+    },
+    {
+      "id": "af_sarah",
+      "accent": "en-US",
+      "locale": "en-US",
+      "country": "United States",
+      "gender": "female",
+      "lang": "a",
+      "grade": "C+",
+      "language": "en"
+    },
+    {
+      "id": "af_sky",
+      "accent": "en-US",
+      "locale": "en-US",
+      "country": "United States",
+      "gender": "female",
+      "lang": "a",
+      "grade": "C-",
+      "language": "en"
+    },
+    {
+      "id": "am_adam",
+      "accent": "en-US",
+      "locale": "en-US",
+      "country": "United States",
+      "gender": "male",
+      "lang": "a",
+      "grade": "F+",
+      "language": "en"
+    },
+    {
+      "id": "am_echo",
+      "accent": "en-US",
+      "locale": "en-US",
+      "country": "United States",
+      "gender": "male",
+      "lang": "a",
+      "grade": "D",
+      "language": "en"
+    },
+    {
+      "id": "am_eric",
+      "accent": "en-US",
+      "locale": "en-US",
+      "country": "United States",
+      "gender": "male",
+      "lang": "a",
+      "grade": "D",
+      "language": "en"
+    },
+    {
+      "id": "am_liam",
+      "accent": "en-US",
+      "locale": "en-US",
+      "country": "United States",
+      "gender": "male",
+      "lang": "a",
+      "grade": "D",
+      "language": "en"
+    },
+    {
+      "id": "am_santa",
+      "accent": "en-US",
+      "locale": "en-US",
+      "country": "United States",
+      "gender": "male",
+      "lang": "a",
+      "grade": "D-",
+      "language": "en"
     }
   ]
 }
