@@ -377,6 +377,144 @@
       <div class="status" id="status">Ready.</div>
     </section>
 
+    <section class="panel" id="voiceLab" data-state="loading" aria-labelledby="voiceLabTitle">
+      <style>
+        #voiceLab input[type="text"] {
+          width: 100%;
+          font: inherit;
+          color: var(--text);
+          background: #10141a;
+          border: 1px solid #333d49;
+          border-radius: 9px;
+          padding: 10px 12px;
+        }
+        #voiceLab input[type="text"]:focus-visible {
+          outline: 2px solid var(--accent);
+          outline-offset: 2px;
+        }
+        #voiceLab .vl-flag {
+          color: var(--muted);
+          font: 600 11px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+          letter-spacing: .08em;
+          text-transform: uppercase;
+        }
+        #voiceLab[data-state="ready"] .vl-flag { color: var(--ok); }
+        #voiceLab[data-state="unavailable"] .vl-flag { color: var(--bad); }
+        #voiceLab .vl-note { margin: -2px 0 0; }
+        #voiceLab .vl-readout {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 10px 22px;
+          margin: 14px 0 16px;
+        }
+        #voiceLab .vl-readout div { min-width: 0; }
+        #voiceLab .vl-readout dt {
+          color: var(--muted);
+          font: 600 10px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+          letter-spacing: .09em;
+          text-transform: uppercase;
+        }
+        #voiceLab .vl-readout dd {
+          margin: 2px 0 0;
+          font: 13px/1.35 ui-monospace, SFMono-Regular, Menlo, monospace;
+          overflow-wrap: anywhere;
+        }
+        #voiceLab .vl-readout dd.vl-accent { color: var(--accent); }
+        #voiceLab .vl-grid-head {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          gap: 12px;
+          margin: 18px 0 10px;
+        }
+        #voiceLab .vl-grid-head h3 {
+          margin: 0;
+          color: var(--muted);
+          font: 600 12px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace;
+          letter-spacing: .1em;
+          text-transform: uppercase;
+        }
+        #voiceLab .vl-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+          gap: 8px;
+        }
+        #voiceLab .vl-card {
+          display: grid;
+          gap: 4px;
+          min-width: 0;
+          padding: 9px 10px;
+          border: 1px solid var(--line);
+          border-radius: 10px;
+          background: rgba(0, 0, 0, .16);
+        }
+        #voiceLab .vl-card code {
+          color: var(--accent);
+          font: 11px/1.3 ui-monospace, SFMono-Regular, Menlo, monospace;
+          overflow-wrap: anywhere;
+        }
+        #voiceLab .vl-card span {
+          color: var(--muted);
+          font: 10px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+          overflow-wrap: anywhere;
+        }
+        #voiceLab .vl-card button {
+          justify-self: start;
+          padding: 5px 10px;
+          font-size: 11px;
+        }
+        @media (max-width: 640px) {
+          #voiceLab .vl-grid-head { flex-wrap: wrap; }
+        }
+      </style>
+      <div class="panel-head voice-head">
+        <div>
+          <h2 id="voiceLabTitle">Voice lab</h2>
+          <p>One seed → one base voice and a pitch / formant / tilt variant. A/B it against the same corpus clip.</p>
+        </div>
+        <span class="vl-flag" id="vlState">Starting…</span>
+      </div>
+
+      <div class="voice-row">
+        <div class="field">
+          <label for="vlSeed">Seed</label>
+          <input id="vlSeed" type="text" spellcheck="false" autocomplete="off" autocapitalize="off">
+        </div>
+        <div class="actions">
+          <button id="vlNewSeed" type="button">New seed</button>
+        </div>
+      </div>
+      <p class="hint vl-note">Same seed, same voice — forever.</p>
+
+      <dl class="vl-readout">
+        <div><dt>Base voice</dt><dd id="vlVoice" class="vl-accent">—</dd></div>
+        <div><dt>Archetype</dt><dd id="vlArchetype">—</dd></div>
+        <div><dt>Pitch</dt><dd id="vlPitch">—</dd></div>
+        <div><dt>Formant</dt><dd id="vlFormant">—</dd></div>
+        <div><dt>Tilt</dt><dd id="vlTilt">—</dd></div>
+        <div><dt>Schema</dt><dd id="vlSchema">—</dd></div>
+      </dl>
+
+      <div class="voice-row">
+        <div class="field">
+          <label for="vlPhrase">Phrase</label>
+          <select id="vlPhrase" aria-label="Phrase for the voice lab"></select>
+        </div>
+        <div class="actions">
+          <button id="vlPlayOriginal" class="ghost" type="button" disabled>Play original</button>
+          <button id="vlPlayVariant" class="primary" type="button" disabled>Play variant</button>
+        </div>
+      </div>
+      <div class="status" id="vlStatus" role="status" aria-live="polite">Loading the seeded voice engine…</div>
+
+      <div class="vl-grid-head">
+        <h3>NPC cast</h3>
+        <button id="vlGenerate" type="button" disabled>Generate 8 NPCs</button>
+      </div>
+      <div class="vl-grid" id="vlGrid"></div>
+      <audio id="vlOriginal" preload="none"></audio>
+    </section>
+
     <section class="panel">
       <div class="panel-head">
         <div>
@@ -777,6 +915,321 @@
     if (currentVoice()) {
       setStatus(`Ready. ${totals.clips} clips across ${totals.voices} voices.`, 'ok');
     }
+  </script>
+
+  <script type="module">
+    // Voice lab: seed → base voice + variant, rendered by the RASP wasm module.
+    // Everything is inline because scripts/build.py publishes only index.html.
+    (() => {
+      const panel = document.getElementById('voiceLab');
+      if (!panel) return;
+
+      const withSlash = (base) => (base.endsWith('/') ? base : `${base}/`);
+      const params = new URLSearchParams(location.search);
+      const RASP_BASE = withSlash(params.get('rasp') || 'https://rasp.livive.net/');
+      const AUDIO_PARAM = params.get('audio') || '';
+      const AUDIO_BASE = AUDIO_PARAM ? withSlash(AUDIO_PARAM) : '';
+
+      let REGISTRY = null;
+      try { REGISTRY = registry; } catch { REGISTRY = null; }
+
+      const el = (id) => document.getElementById(id);
+      const ui = {
+        state: el('vlState'),
+        seed: el('vlSeed'),
+        newSeed: el('vlNewSeed'),
+        voice: el('vlVoice'),
+        archetype: el('vlArchetype'),
+        pitch: el('vlPitch'),
+        formant: el('vlFormant'),
+        tilt: el('vlTilt'),
+        schema: el('vlSchema'),
+        phrase: el('vlPhrase'),
+        playOriginal: el('vlPlayOriginal'),
+        playVariant: el('vlPlayVariant'),
+        status: el('vlStatus'),
+        generate: el('vlGenerate'),
+        grid: el('vlGrid'),
+        original: el('vlOriginal'),
+      };
+
+      const SEED_ALPHABET = 'abcdefghijklmnopqrstuvwxyz0123456789';
+      const CARD_COUNT = 8;
+      const SAMPLE_RATE = 48000;
+
+      let api = null;              // { describe, render } once wasm is ready
+      let voices = {};             // voiceId → registry voice
+      try {
+        voices = Object.fromEntries(((REGISTRY && REGISTRY.voices) || []).map((voice) => [voice.id, voice]));
+      } catch { voices = {}; }
+
+      const errorText = (error) =>
+        (typeof error === 'string' ? error : (error && error.message) || String(error));
+
+      function setStatus(message, kind = '') {
+        ui.status.textContent = message;
+        if (kind) ui.status.dataset.kind = kind;
+        else delete ui.status.dataset.kind;
+      }
+
+      function randomSeed() {
+        const alphabet = SEED_ALPHABET;
+        let bytes = null;
+        try {
+          bytes = crypto.getRandomValues(new Uint8Array(6));
+        } catch { bytes = null; }
+        let suffix = '';
+        for (let index = 0; index < 6; index += 1) {
+          const value = bytes ? bytes[index] : Math.floor(Math.random() * 256);
+          suffix += alphabet[value % alphabet.length];
+        }
+        return `npc-${suffix}`;
+      }
+
+      function setSeed(seed) {
+        ui.seed.value = seed;
+        // Mirror into the attribute so the default seed survives a DOM snapshot.
+        ui.seed.setAttribute('value', seed);
+      }
+
+      function fillPhrases() {
+        if (!REGISTRY || !Array.isArray(REGISTRY.phrases) || !REGISTRY.phrases.length) return;
+        const groups = Array.isArray(REGISTRY.groups) && REGISTRY.groups.length
+          ? REGISTRY.groups
+          : [...new Set(REGISTRY.phrases.map((phrase) => phrase.group))];
+        ui.phrase.replaceChildren();
+        for (const group of groups) {
+          const phrases = REGISTRY.phrases.filter((phrase) => phrase.group === group);
+          if (!phrases.length) continue;
+          const optgroup = document.createElement('optgroup');
+          optgroup.label = group;
+          for (const phrase of phrases) {
+            const option = document.createElement('option');
+            option.value = phrase.id;
+            option.textContent = `${phrase.id} — ${phrase.text}`;
+            optgroup.append(option);
+          }
+          ui.phrase.append(optgroup);
+        }
+        ui.phrase.value = REGISTRY.phrases[0].id;
+      }
+
+      function clearReadout() {
+        for (const node of [ui.voice, ui.archetype, ui.pitch, ui.formant, ui.tilt, ui.schema]) {
+          node.textContent = '—';
+        }
+      }
+
+      function refreshReadout() {
+        if (!api) return;
+        try {
+          const spec = api.describe(ui.seed.value);
+          const voice = voices[spec.voiceId];
+          ui.voice.textContent = voice
+            ? `${spec.voiceId} · ${voice.language || '?'} · ${voice.gender || '?'}`
+            : spec.voiceId;
+          ui.archetype.textContent = spec.archetype;
+          ui.pitch.textContent = `${spec.pitchSt >= 0 ? '+' : ''}${spec.pitchSt.toFixed(2)} st`;
+          ui.formant.textContent = `×${spec.formantRatio.toFixed(3)}`;
+          ui.tilt.textContent = `${spec.tiltDbPerOct.toFixed(2)} dB/oct`;
+          ui.schema.textContent = `v${spec.schema}`;
+        } catch (error) {
+          clearReadout();
+          setStatus(`Could not describe that seed: ${errorText(error)}`, 'error');
+        }
+      }
+
+      let context = null;
+      function audioContext() {
+        if (context) return context;
+        const Ctor = window.AudioContext || window.webkitAudioContext;
+        if (!Ctor) throw new Error('WebAudio is not available');
+        try {
+          context = new Ctor({ sampleRate: SAMPLE_RATE });
+        } catch {
+          context = new Ctor();
+        }
+        return context;
+      }
+
+      let variantSource = null;
+      function stopVariant() {
+        if (!variantSource) return;
+        try { variantSource.stop(); } catch { /* already stopped */ }
+        try { variantSource.disconnect(); } catch { /* already detached */ }
+        variantSource = null;
+      }
+
+      // Create/resume the context inside the click itself, before any await.
+      function primeAudio() {
+        try {
+          const ctx = audioContext();
+          if (ctx.state === 'suspended') Promise.resolve(ctx.resume()).catch(() => {});
+        } catch { /* playback reports the failure with context */ }
+      }
+
+      const clipCache = new Map();
+      async function clipBytes(path) {
+        if (clipCache.has(path)) return clipCache.get(path);
+        const url = AUDIO_BASE + path;
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`${response.status} ${response.statusText} — ${url}`);
+        const bytes = new Uint8Array(await response.arrayBuffer());
+        clipCache.set(path, bytes);
+        return bytes;
+      }
+
+      function entryFor(voiceId, phraseId) {
+        return (REGISTRY && REGISTRY.files && REGISTRY.files[voiceId] && REGISTRY.files[voiceId][phraseId]) || null;
+      }
+
+      async function playVariant(seed) {
+        const phraseId = ui.phrase.value;
+        if (!api || !phraseId) {
+          setStatus('Voice lab is not ready yet.', 'error');
+          return;
+        }
+        try {
+          const started = performance.now();
+          const spec = api.describe(seed);
+          const entry = entryFor(spec.voiceId, phraseId);
+          if (!entry) throw new Error(`no clip for ${spec.voiceId}/${phraseId}`);
+          const bytes = await clipBytes(entry.path);
+          const pcm = api.render(bytes, seed);
+
+          const ctx = audioContext();
+          const buffer = ctx.createBuffer(1, pcm.length, SAMPLE_RATE);
+          if (typeof buffer.copyToChannel === 'function') buffer.copyToChannel(pcm, 0);
+          else buffer.getChannelData(0).set(pcm);
+
+          stopVariant();
+          const source = ctx.createBufferSource();
+          source.buffer = buffer;
+          source.connect(ctx.destination);
+          source.start();
+          variantSource = source;
+
+          const ms = Math.round(performance.now() - started);
+          setStatus(
+            `Variant · ${seed} → ${spec.voiceId} · ${spec.archetype} · ${pcm.length} samples · ${ms} ms`,
+            'ok',
+          );
+        } catch (error) {
+          setStatus(`Variant failed: ${errorText(error)}`, 'error');
+        }
+      }
+
+      async function playOriginal(seed) {
+        const phraseId = ui.phrase.value;
+        if (!api || !phraseId) {
+          setStatus('Voice lab is not ready yet.', 'error');
+          return;
+        }
+        try {
+          const spec = api.describe(seed);
+          const entry = entryFor(spec.voiceId, phraseId);
+          if (!entry) throw new Error(`no clip for ${spec.voiceId}/${phraseId}`);
+          stopVariant();
+          ui.original.pause();
+          ui.original.src = AUDIO_BASE + entry.path;
+          ui.original.load();
+          await ui.original.play();
+          setStatus(`Original · ${spec.voiceId} → ${phraseId} · ${entry.durationMs} ms · ${entry.path}`, 'ok');
+        } catch (error) {
+          setStatus(`Original failed: ${errorText(error)}`, 'error');
+        }
+      }
+
+      function generateCards() {
+        if (!api) return;
+        ui.grid.replaceChildren();
+        for (let index = 0; index < CARD_COUNT; index += 1) {
+          const seed = randomSeed();
+          const spec = api.describe(seed);
+          const card = document.createElement('article');
+          card.className = 'vl-card';
+          const code = document.createElement('code');
+          code.textContent = seed;
+          const meta = document.createElement('span');
+          meta.textContent = `${spec.voiceId} · ${spec.archetype}`;
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.textContent = 'Play';
+          button.addEventListener('click', () => {
+            primeAudio();
+            void playVariant(seed);
+          });
+          card.append(code, meta, button);
+          ui.grid.append(card);
+        }
+        setStatus(`Generated ${CARD_COUNT} seeded NPCs.`, 'ok');
+      }
+
+      function markUnavailable(error) {
+        api = null;
+        panel.dataset.state = 'unavailable';
+        ui.state.textContent = 'Unavailable';
+        clearReadout();
+        ui.playOriginal.disabled = true;
+        ui.playVariant.disabled = true;
+        ui.generate.disabled = true;
+        setStatus(
+          `Voice lab unavailable — ${errorText(error)}. The rest of the bench still works.`,
+          'error',
+        );
+      }
+
+      async function loadEngine() {
+        try {
+          const module = await import(`${RASP_BASE}wasm/rasp.js`);
+          // Object form: the wasm-bindgen glue warns on a bare URL argument.
+          await module.default({ module_or_path: `${RASP_BASE}wasm/rasp_bg.wasm` });
+          if (typeof module.describe !== 'function' || typeof module.render !== 'function') {
+            throw new Error('wasm module lacks describe/render');
+          }
+          api = { describe: module.describe, render: module.render };
+          panel.dataset.state = 'ready';
+          ui.state.textContent = 'Ready';
+          ui.playOriginal.disabled = false;
+          ui.playVariant.disabled = false;
+          ui.generate.disabled = false;
+          refreshReadout();
+          setStatus('Engine ready. Pick a phrase, then A/B the same line.', 'ok');
+        } catch (error) {
+          markUnavailable(error);
+        }
+      }
+
+      if (!REGISTRY || !ui.seed || !ui.phrase) {
+        markUnavailable(new Error('the registry is missing'));
+        return;
+      }
+
+      fillPhrases();
+      setSeed(randomSeed());
+      clearReadout();
+
+      ui.seed.addEventListener('input', refreshReadout);
+      ui.newSeed.addEventListener('click', () => {
+        setSeed(randomSeed());
+        refreshReadout();
+        setStatus(`Seed: ${ui.seed.value}`);
+      });
+      ui.playVariant.addEventListener('click', () => {
+        primeAudio();
+        void playVariant(ui.seed.value);
+      });
+      ui.playOriginal.addEventListener('click', () => { void playOriginal(ui.seed.value); });
+      ui.generate.addEventListener('click', () => {
+        try {
+          generateCards();
+        } catch (error) {
+          setStatus(`Could not generate NPCs: ${errorText(error)}`, 'error');
+        }
+      });
+
+      void loadEngine();
+    })();
   </script>
 </body>
 </html>
